@@ -22,22 +22,21 @@
         
             function Numbers()
         {
-
             console.log('====')
-        // do 
-        // {   
-        //     rn = Math.floor(Math.random() * 99) + 1;
-        //     if (shipsRandom.indexOf(rn) === -1)
-        //     {
-        //         shipsRandom.push(rn);
-        //         i++;
-        //         console.log(`${i}: `,rn);
-        //     }
-        // }
-        // while (i !== 5)
+        do 
+        {   
+            rn = Math.floor(Math.random() * 99) + 1;
+            if (shipsRandom.indexOf(rn) === -1)
+            {
+                shipsRandom.push(rn);
+                i++;
+                console.log(`${i}: `,rn);
+            }
+        }
+        while (i !== 5)
         return;
         }
-   // console.log(shipsRandom);
+   console.log(Numbers);
 
 
 //    // повторить с интервалом 2 секунды
@@ -67,9 +66,10 @@
     </script>
 </head>
 <body>
+
     <div class="wrapper">
         <div class="block" style="z-index: 0;"></div>
-        <div class="block" style="background-color: red;width: 80px; height: 80px;"></div>
+        <div class="block" style="background-color: pink;width: 80px; height: 80px;"></div>
     </div>
 
 </body>
