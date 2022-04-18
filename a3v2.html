@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>   
+    <style>
+    *{
+        box-sizing: border-box;
+    }
+    .box, .blue,.red 
+        {
+            float: left;
+            width: 15px;
+            height: 15px;
+            border: 0.7px solid black;
+        }
+    .wrap   {background-color: bisque; margin: 0 auto;}
+    .blue   {background-color: blue;}
+    .red    {background-color: red;}    
+    .clear  {clear:both;}
+    </style>
+</head>
+<body>
+<script>
+const MyGrid = (finalString ='') =>{
+    let l = x = document.getElementById('count').value;
+    for (let i=1;i<=x; i++,l--)
+        {
+            for (let j=1; j<=x; j++)
+                {
+                    if(j==i || j==l)    {i==l || i==(l-1) || i==(l+1) ? finalString +=`<div class ="red"></div>`: finalString +=`<div class ="blue"></div>`;}
+                    else    {finalString +=`<div class ="box"></div>`;} 
+                }
+            finalString +=`<div class ="clear"></div>`;
+        }; 
+    document.querySelector('.res').innerHTML=finalString;
+};
+
+const remo = () => document.querySelector('.res').innerHTML=``;
+
+const renderTree = (count) =>{
+let item='';
+    for (let i=1; i<=count; i++) {item += `<option value="${i}">${i}</option>`}
+return item;
+};
+
+let mainW = window.innerWidth -30;
+let count = Math.floor(mainW/15);
+
+document.querySelector(`body`).innerHTML=`<div class="wrap">
+    <H3>What size:??</H3>
+    <select id='count' name="size"></select>
+    <button type="button" onclick="MyGrid()">Go!</button>
+    <button type="button" onclick="remo()">CLEAR</button>
+    <div class='res'>
+    </div></div>`;
+
+let wrapper = document.querySelector('.wrap');
+    wrapper.style.width =`${mainW}px`;
+    wrapper.style.height =`${mainW+61}px`;
+
+document.querySelector('#count').innerHTML = renderTree(count);
+</script>
+</body>
+</html>

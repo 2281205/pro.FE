@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+    <style>
+        img{width: 20px;}
+        table, tr, td{border: 1px solid; border-collapse: collapse;}
+        tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even){background: rgb(77, 35, 8);}
+        tr:first-child{background: red;}
+        .wrapper{width: 600px; height: 600px; margin: 0 auto; background-color: tan;}
+        .block{position: fixed; top:50%; left: 50%; background-color: green;width: 100px; height: 100px;}
+    /* .cover {background-color: red; } */
+    </style>
+    <script>
+        let ships = ['a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'i1', 'j1', 'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'i2', 'j2', 'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3', 'i3', 'j3', 'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4', 'i4', 'j4', 'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5', 'i5', 'j5', 'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6', 'i6', 'j6', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7', 'i7', 'j7', 'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'i8', 'j8', 'a9', 'b9', 'c9', 'd9', 'e9', 'f9', 'g9', 'h9', 'i9', 'j9', 'a10', 'b10', 'c10', 'd10', 'e10', 'f10', 'g10', 'h10', 'i10', 'j10'],
+            shipsRandom = [],
+            repeat = true,
+            rn = i = 0;
+        
+            function Numbers()
+        {
+
+            console.log('====')
+        // do 
+        // {   
+        //     rn = Math.floor(Math.random() * 99) + 1;
+        //     if (shipsRandom.indexOf(rn) === -1)
+        //     {
+        //         shipsRandom.push(rn);
+        //         i++;
+        //         console.log(`${i}: `,rn);
+        //     }
+        // }
+        // while (i !== 5)
+        return;
+        }
+   // console.log(shipsRandom);
+
+
+//    // повторить с интервалом 2 секунды
+// let timerId = setInterval(() => console.log('tick'), 700);
+
+// // остановить вывод через 5 секунд
+// setTimeout(() => { clearInterval(timerId); console.log('stop'); }, 20000);
+
+    // setTimeout(Numbers, 1000);
+
+//     function Repeat()
+// {
+//         for(qq=0; qq<5;)
+//         {
+//             if (repeat) 
+//             {
+//                 Numbers();
+//             console.log(`+++`,qq)
+//             qq++;
+//             if(qq == 23){repeat=false}
+//             }
+//             else {break;}
+//         }
+//         return;
+// }
+// Repeat();
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="block" style="z-index: 0;"></div>
+        <div class="block" style="background-color: red;width: 80px; height: 80px;"></div>
+    </div>
+
+</body>
+</html>
