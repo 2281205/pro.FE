@@ -13,10 +13,16 @@
     .btn   {margin-left: 40%;}
             /* 1 */
     .block{
+        background-color: black;
     margin: 0;
     position: absolute;               /* 2 */
                          /* 3 */  
 }
+.class1{background-color: blue;}
+.class2{background-color: green;}
+.class3{background-color: red;}
+.class4{background-color: yellow;}
+
     </style>
 </head>
 <body>
@@ -26,7 +32,7 @@ const remo = () => document.querySelector('.res').innerHTML=``;
 
 let mainW = window.innerWidth >= window.innerHeight ? window.innerHeight-40 : window.innerWidth-30;
 let baseBlock = sizeBlock = Math.floor(mainW/20);
-let count = 0;
+let count = loop = 0;
 
 console.log(`window.innerWidth: ${window.innerWidth};
 window.innerHeight: ${window.innerHeight};
@@ -36,36 +42,41 @@ sizeBlock: ${sizeBlock}`);
 document.querySelector(`body`).innerHTML=`
     <div class='btn'>
     <button type="button" onclick="manualPlus ()">manuall <b>+</b></button>
-    <button type="button" onclick="manualMinus()">manuall <b>-</b></button></div>
+    <button type="button" onclick="clearInterval(loop)">manuall <b>STOP</b></button></div>
     <div class="wrap"></div>`;
 
 let wrapper = document.querySelector('.wrap');
     wrapper.style.width =`${mainW}px`;
     wrapper.style.height =`${mainW}px`;
 
-manualPlus = () =>{
-    if (!document.querySelector('.block'))
+let Arr = new Array(5);
+
+manualPlus = (i=1) =>{
+    if (!document.querySelector(`.class${i}`))
         {
         console.log(`in!!`);
             count = 0;
             sizeBlock=baseBlock;
-        document.querySelector('.wrap').innerHTML =`<div class='block'></div>`;
+        document.querySelector('.wrap').innerHTML =`<div class='block class${i}'></div>`;
            let block = document.querySelector('.block')
             block.style.width =`${sizeBlock}px`;
             block.style.height =`${sizeBlock}px`;
-            block.style.backgroundColor = 'red';  
+           // block.style.backgroundColor = 'red';  
+            block.style.zIndex = i;
         }
     sizeBlock +=Math.floor(mainW/100);    
-    console.log(`count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+    console.log(`z-index: ${i}, count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, 
+    Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
         
     let block = document.querySelector('.block')
     block.style.width =`${sizeBlock}px`; block.style.height =`${sizeBlock}px`;
     
-    count==98
-    ?  count=document.querySelector('.wrap').innerHTML = ``
-    :  count++;
+   if(count==98)
+        {document.querySelector('.wrap').innerHTML = ``; clearInterval(Arr[i]);}
+    else count++;
 
     };
+
 
 manualMinus = () =>{
 
@@ -80,6 +91,27 @@ manualMinus = () =>{
     let block = document.querySelector('.block');
     block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
         };      
+
+// $("#cimg2").click(function(event){
+//   clearInterval(idIntervals);//тут останавливаем таймер
+//   idIntervals=setInterval(function(){timer();},1000);//опять запускается таймер
+// }
+
+
+// const blocks = document.querySelectorAll(`.block`);
+// blocks.forEach((block, index) => {
+//     index++;
+//     setTimeout(()=>block.remove(), index*1000);
+// })
+
+//setTimeout(()=>block.classList.remove(className), 1000);
+
+// for(ii=1; ii<4;ii++){
+// Arr[ii] = setInterval(()=>{manualPlus(ii)}, ii*100);}
+
+setTimeout( () => {Arr[1] = setInterval(()=> {manualPlus(1)}, 100)},1000);
+// setTimeout( () => {Arr[2] = setInterval(()=> {manualPlus(2)}, 100)},2000);
+// setTimeout( () => {Arr[3] = setInterval(()=> {manualPlus(3)}, 100)},3000);
 
 </script>
 </body>
