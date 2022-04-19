@@ -9,30 +9,33 @@
     *{
         box-sizing: border-box;
     }
-    .wrap   {background-color: bisque; margin: 3px auto;position: relative }
-    .btn   {margin-left: 40%;}
-            /* 1 */
-    .block{
-        background-color: black;
-    margin: 0;
-    position: absolute;               /* 2 */
-                         /* 3 */  
-}
-.class1{background-color: blue;}
-.class2{background-color: green;}
-.class3{background-color: red;}
-.class4{background-color: yellow;}
+    .block
+    {
+    background-color: black;margin: 0;position: absolute;
+    }
+    .wrap  {background-color: bisque; margin: 3px auto;position: relative }
+    .class1{background-color: red;}
+    .class2{background-color: orange;}
+    .class3{background-color: yellow;}
+    .class4{background-color: green;}
+    .class5{background-color: lime;}
+    .class6{background-color: aqua;}
+    .class7{background-color: blue;}
+    .class8{background-color: violet;}
+    .class9{background-color: purple;}
+    .class10{background-color: darkred;}
 
+    .btn   {margin-left: 40%;}
     </style>
 </head>
 <body>
 <script>
 
-const remo = () => document.querySelector('.res').innerHTML=``;
 
 let mainW = window.innerWidth >= window.innerHeight ? window.innerHeight-40 : window.innerWidth-30;
-let baseBlock = sizeBlock = Math.floor(mainW/20);
-let count = loop = 0;
+let baseBlock = Math.floor(mainW/20);
+let count = [];
+let sizeBlock = [];
 
 console.log(`window.innerWidth: ${window.innerWidth};
 window.innerHeight: ${window.innerHeight};
@@ -41,8 +44,10 @@ sizeBlock: ${sizeBlock}`);
 
 document.querySelector(`body`).innerHTML=`
     <div class='btn'>
-    <button type="button" onclick="manualPlus ()">manuall <b>+</b></button>
-    <button type="button" onclick="clearInterval(loop)">manuall <b>STOP</b></button></div>
+    <button type="button" onclick="loop()"><b>START</b></button>
+    <button type="button" onclick="manualSTOP()">manuall <b>STOP</b></button>
+    <button type="button" onclick="manualClear()"><b>clear</b></button>
+    </div>
     <div class="wrap"></div>`;
 
 let wrapper = document.querySelector('.wrap');
@@ -51,29 +56,34 @@ let wrapper = document.querySelector('.wrap');
 
 let Arr = new Array(5);
 
-manualPlus = (i=1) =>{
+manualPlus = (i) =>{
     if (!document.querySelector(`.class${i}`))
         {
         console.log(`in!!`);
-            count = 0;
-            sizeBlock=baseBlock;
-        document.querySelector('.wrap').innerHTML =`<div class='block class${i}'></div>`;
-           let block = document.querySelector('.block')
+            count[i] = 0;
+           sizeBlock[i]=baseBlock;
+            wrapper.insertAdjacentHTML(`beforeEnd`,`<div class='block class${i}'></div>`);
+                //document.querySelector('.wrap').innerHTML =`<div class='block class${i}'></div>`;
+           let block = document.querySelector(`.class${i}`)
             block.style.width =`${sizeBlock}px`;
             block.style.height =`${sizeBlock}px`;
            // block.style.backgroundColor = 'red';  
             block.style.zIndex = i;
         }
-    sizeBlock +=Math.floor(mainW/100);    
-    console.log(`z-index: ${i}, count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, 
+    sizeBlock[i] +=Math.floor(mainW/100);    
+    console.log(`z-index: ${i}, count: ${count[i]}, sizeBlock= ${sizeBlock[i]}, step= ${Math.floor(mainW/100)}, 
     Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
         
-    let block = document.querySelector('.block')
-    block.style.width =`${sizeBlock}px`; block.style.height =`${sizeBlock}px`;
+    let block = document.querySelector(`.class${i}`)
+    block.style.width =`${sizeBlock[i]}px`; block.style.height =`${sizeBlock[i]}px`;
     
-   if(count==98)
-        {document.querySelector('.wrap').innerHTML = ``; clearInterval(Arr[i]);}
-    else count++;
+   if(count[i]==100)
+        {
+           // document.querySelector('.wrap').innerHTML = ``; 
+           block.style.width =`0px`; block.style.height =`0px`;
+           block.style.zIndex=-100;
+            clearInterval(Arr[i]);}
+    else count[i]++;
 
     };
 
@@ -108,10 +118,21 @@ manualMinus = () =>{
 
 // for(ii=1; ii<4;ii++){
 // Arr[ii] = setInterval(()=>{manualPlus(ii)}, ii*100);}
+const loop = () => {
+setTimeout( () => {Arr[1] = setInterval(()=> {manualPlus(1)}, 300)},10);
+setTimeout( () => {Arr[2] = setInterval(()=> {manualPlus(2)}, 300)},3000);
+setTimeout( () => {Arr[3] = setInterval(()=> {manualPlus(3)}, 300)},6000);
+setTimeout( () => {Arr[4] = setInterval(()=> {manualPlus(4)}, 300)},9000);
+setTimeout( () => {Arr[5] = setInterval(()=> {manualPlus(5)}, 300)},12000);
+setTimeout( () => {Arr[6] = setInterval(()=> {manualPlus(6)}, 300)},15000);
+setTimeout( () => {Arr[7] = setInterval(()=> {manualPlus(7)}, 300)},18000);
+setTimeout( () => {Arr[8] = setInterval(()=> {manualPlus(8)}, 300)},21000);
+setTimeout( () => {Arr[9] = setInterval(()=> {manualPlus(9)}, 300)},24000);
+setTimeout( () => {Arr[10] = setInterval(()=> {manualPlus(10)}, 300)},27000);
+}
 
-setTimeout( () => {Arr[1] = setInterval(()=> {manualPlus(1)}, 100)},1000);
-// setTimeout( () => {Arr[2] = setInterval(()=> {manualPlus(2)}, 100)},2000);
-// setTimeout( () => {Arr[3] = setInterval(()=> {manualPlus(3)}, 100)},3000);
+const manualSTOP = () => Arr.forEach (item=>clearInterval(item))
+const manualClear = () => wrapper.innerHTML='';
 
 </script>
 </body>
