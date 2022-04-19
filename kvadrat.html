@@ -26,27 +26,50 @@
 
 const remo = () => document.querySelector('.res').innerHTML=``;
 
-let mainW = window.innerWidth >= window.innerHeight ? window.innerHeight-30 : window.innerWidth-30;
-let count = Math.floor(mainW/15);
+let mainW = window.innerWidth >= window.innerHeight ? window.innerHeight-40 : window.innerWidth-30;
+let count = Math.floor(mainW/15)
+    baseBlock = sizeBlock = 50;
 console.log(`window.innerWidth: ${window.innerWidth};
 window.innerHeight: ${window.innerHeight};
 mainW: ${mainW}`)
 document.querySelector(`body`).innerHTML=`
     <div class='btn'>
-    <button type="button" onclick="MyGrid()">BTN-1</button>
-    <button type="button" onclick="remo()">btn-2</button></div>
+    <button type="button" onclick="manualPlus ()">manuall <b>+</b></button>
+    <button type="button" onclick="manualMinus()">manuall <b>-</b></button></div>
     <div class="wrap">
         <div class='block'>
     </div></div>`;
 
 let wrapper = document.querySelector('.wrap');
     wrapper.style.width =`${mainW}px`;
-    wrapper.style.height =`${mainW-23}px`;
+    wrapper.style.height =`${mainW}px`;
 
 let block = document.querySelector('.block');
-    block.style.width =`50px`;
-    block.style.height =`50px`;
+    block.style.width =`${sizeBlock}px`;
+    block.style.height =`${sizeBlock}px`;
     block.style.backgroundColor = 'red';  
+
+manualPlus = () =>{
+    sizeBlock>=mainW-10
+    ?   sizeBlock=baseBlock
+    :   sizeBlock +=5;
+
+    console.log(`sizeBlock= ${sizeBlock}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+
+    block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
+        };
+
+manualMinus = () =>{
+
+    sizeBlock<=baseBlock 
+    ?   sizeBlock=mainW-10
+    :   sizeBlock -=5;
+
+    console.log(`sizeBlock= ${sizeBlock}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+
+    block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
+        };      
+
 </script>
 </body>
 </html>
