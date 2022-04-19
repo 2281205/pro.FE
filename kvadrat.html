@@ -37,31 +37,35 @@ document.querySelector(`body`).innerHTML=`
     <div class='btn'>
     <button type="button" onclick="manualPlus ()">manuall <b>+</b></button>
     <button type="button" onclick="manualMinus()">manuall <b>-</b></button></div>
-    <div class="wrap">
-        <div class='block'>
-    </div></div>`;
+    <div class="wrap"></div>`;
 
 let wrapper = document.querySelector('.wrap');
     wrapper.style.width =`${mainW}px`;
     wrapper.style.height =`${mainW}px`;
 
-let block = document.querySelector('.block');
-    block.style.width =`${sizeBlock}px`;
-    block.style.height =`${sizeBlock}px`;
-    block.style.backgroundColor = 'red';  
-
 manualPlus = () =>{
-    sizeBlock>=mainW-10
-    ?   sizeBlock=baseBlock
-    :   sizeBlock +=Math.floor(mainW/100);
-
+    if (!document.querySelector('.block'))
+        {
+        console.log(`in!!`);
+            count = 0;
+            sizeBlock=baseBlock;
+        document.querySelector('.wrap').innerHTML =`<div class='block'></div>`;
+           let block = document.querySelector('.block')
+            block.style.width =`${sizeBlock}px`;
+            block.style.height =`${sizeBlock}px`;
+            block.style.backgroundColor = 'red';  
+        }
+    sizeBlock +=Math.floor(mainW/100);    
     console.log(`count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
-    count>=100
-    ?  count=1
+        
+    let block = document.querySelector('.block')
+    block.style.width =`${sizeBlock}px`; block.style.height =`${sizeBlock}px`;
+    
+    count==98
+    ?  count=document.querySelector('.wrap').innerHTML = ``
     :  count++;
 
-    block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
-        };
+    };
 
 manualMinus = () =>{
 
@@ -73,7 +77,7 @@ manualMinus = () =>{
     count<=1
     ?  count=100
     :  count--;
-
+    let block = document.querySelector('.block');
     block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
         };      
 
