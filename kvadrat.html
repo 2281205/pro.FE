@@ -15,10 +15,8 @@
     .block{
     margin: 0;
     position: absolute;               /* 2 */
-    top: 50%;  
-    left: 50%;                       /* 3 */
-    transform: translate(0, -50%) }   /* 4 */
-
+                         /* 3 */  
+}
     </style>
 </head>
 <body>
@@ -27,11 +25,14 @@
 const remo = () => document.querySelector('.res').innerHTML=``;
 
 let mainW = window.innerWidth >= window.innerHeight ? window.innerHeight-40 : window.innerWidth-30;
-let count = Math.floor(mainW/15)
-    baseBlock = sizeBlock = 50;
+let baseBlock = sizeBlock = Math.floor(mainW/20);
+let count = 0;
+
 console.log(`window.innerWidth: ${window.innerWidth};
 window.innerHeight: ${window.innerHeight};
-mainW: ${mainW}`)
+mainW: ${mainW}
+sizeBlock: ${sizeBlock}`);
+
 document.querySelector(`body`).innerHTML=`
     <div class='btn'>
     <button type="button" onclick="manualPlus ()">manuall <b>+</b></button>
@@ -52,9 +53,12 @@ let block = document.querySelector('.block');
 manualPlus = () =>{
     sizeBlock>=mainW-10
     ?   sizeBlock=baseBlock
-    :   sizeBlock +=5;
+    :   sizeBlock +=Math.floor(mainW/100);
 
-    console.log(`sizeBlock= ${sizeBlock}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+    console.log(`count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+    count>=100
+    ?  count=1
+    :  count++;
 
     block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
         };
@@ -63,9 +67,12 @@ manualMinus = () =>{
 
     sizeBlock<=baseBlock 
     ?   sizeBlock=mainW-10
-    :   sizeBlock -=5;
-
-    console.log(`sizeBlock= ${sizeBlock}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+    :   sizeBlock -=Math.floor(mainW/100);
+    console.log(`count: ${count}, sizeBlock= ${sizeBlock}, step= ${Math.floor(mainW/100)}, Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+    
+    count<=1
+    ?  count=100
+    :  count--;
 
     block.style.width =`${sizeBlock}px`;block.style.height =`${sizeBlock}px`;
         };      
