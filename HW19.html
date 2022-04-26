@@ -7,57 +7,77 @@
     <title>HW</title>
     <style>
         .wrap{
-            width: 400px;
-            height: 400px;
+            width: 600px;
+            /* height: 400px; */
             background-color: tan;
             margin: 0 auto;
         }
-        .menu{
-            margin-top: 10px;
-            display: flex;
-            justify-content:center
-        }
-        .menu_item{background-color: lightcoral;padding: 20px;}
+        .menu{display:flex; justify-content:center;}
+        .article{outline: 2px orange solid; display: flex;   justify-content:center; align-items: center;}
+
+        .article_item {width: 90%;outline: 2px pink solid;display: flex;justify-content:center;}
+        .article_item-content{display: flex; flex-direction: column; align-items: center;}
+        img {width: 65%;}
+        .icon{
+            width: 100px;
+            height: 100px; 
+            background-color: blueviolet; border-radius: 50%;display: flex;justify-content:center;align-items: center;}
+        .menu_item{background-color: lightcoral;padding: 20px;font-size: large;}
+        .menu_item:hover{background-color:red}
         .menu_item:last-child{border-radius: 0 45px 45px 0;}
         .menu_item:first-child{border-radius: 45px 0 0 45px;}
-        
+
     </style>
 </head>
 <body>
-    <!-- <div class="wrap">
-        <img src="./img/extract.svg" alt="">
-        <img src="./img/info.png" alt="">
-        <img src="./img/payment.svg" alt="">
-        <img src="./img/settings.svg" alt="">
-    </div> -->
-
-    <script>
-
+<script>
 let menu = [   {tab: 'Платежі',
 		        title: 'Ну де ще ви бачили безкоштовні перекази?',
 		        description: 'Поповнення картки monobank — безкоштовно! А далі поповнюйте мобільний, сплачуйте комунальні та інші послуги без будь-якої комісії. Навіть за рахунок кредитних коштів! Переказуйте гроші своїм контактам за один клік — це простіше, ніж ви можете собі уявити',
-		        icon: 'payment'},
+		        icon: 'payment',
+                iphone: 'https://www.monobank.ua/resources/1.0.17.1-1651000699000/img/main/home-payments-iphone-uk@2x.webp'},
 	           {tab: 'Виписка',
 		        title: 'Усі ваші витрати на кінчиках пальців',
 		        description: 'Завжди хотіли перевірити, який відсоток ваших витрат припадає на нестримні веселощі? Тепер це просто. Користуйтеся карткою monobank, і ви завжди зможете бачити свої витрати в красивому й структурованому вигляді',
-		        icon: 'extract'},
-	           {tab: 'Налаштування картки',
+		        icon: 'extract',
+                iphone: 'https://www.monobank.ua/resources/1.0.17.1-1651000699000/img/main/home-pfm-iphone-uk@2x.webp'},
+               {tab: 'Налаштування картки',
 		        title: 'Забудьте все, що ви знали про банкінг',
 		        description: 'Установлюйте самостійно будь-які ліміти, зокрема для запиту PIN-коду, коли купуєте. Не можете знайти картку? Заблокуйте її на якийсь час, далі від гріха. Змінюйте ПІН просто в додатку, без походів до банкомата',
-		        icon: 'settings'}
+		        icon: 'settings',
+                iphone: 'https://www.monobank.ua/resources/1.0.17.1-1651000699000/img/main/home-settings-iphone-uk@2x.webp'},
             ];
-    menu.forEach( item => console.log(item) );
-    document.querySelector(`body`).innerHTML = `<div class='wrap'><div class='menu'></div></div>`
-    let wrap = document.querySelector(`.menu`);
-    for (i=0;i<3; i++)
-        {
-        wrap.insertAdjacentHTML(`beforeEnd`,`<div class='menu_item'>${menu[i].tab}</div>`);
-        let block = document.querySelector(`.menu_item`);
-        // block.style.padding = `20px`;
-        // block.style.background =`red`;
-        // block.style.outline= `0.5px solid`;
-        }
+menu.forEach( item => console.log(item) );
 
+    document.querySelector(`body`).innerHTML = `<div class='wrap'><div class='menu'></div><div class='article'></div></div>`
+    let wrap = document.querySelector(`.menu`),
+        article = document.querySelector(`.article`);
+    
+const renderItem =(e) =>
+{
+console.log (e)
+article.insertAdjacentHTML(`beforeEnd`,`
+                            <div class='article_item'><img src="${menu[e].iphone}" alt="${menu[e].tab}"></div>
+                           
+                            <div class='article_item'>
+                                <div class='article_item-content'> 
+                                    <div class="icon" style="background-color:red"></div>
+                                        <div class="icon"><img src="./img/${menu[e].icon}.svg" alt="иконка ${menu[e].tab}"></div>
+                                    <h2><b> ${menu[e].title}</b></h2><br>
+                                    <p>${menu[e].description}</p>
+                                        
+                                                                    </div></div>
+                           
+                            `);
+                            
+}    
+    
+    
+    
+        for (i=0;i<3; i++)
+        {wrap.insertAdjacentHTML(`beforeEnd`,`<div class='menu_item'>${menu[i].tab}</div>`);}
+
+renderItem(2);    
     </script>
 </body>
 </html>
