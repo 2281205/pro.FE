@@ -8,27 +8,24 @@
     <style>
         *{box-sizing: border-box;}
         .wrap   {background-color: bisque; margin: 3px auto;position: relative; display: flex; flex-wrap: wrap;}
-        .class0 {background-color: red;}
-        .class1 {background-color: orange;}
-        .class2 {background-color: yellow;}
-        .class3 {background-color: green;}
-        .class4 {background-color: lime;}
-        .class5 {background-color: aqua;}
-        .class6 {background-color: blue;}
-        .class7 {background-color: violet;}
-        .class8 {background-color: purple;}
         .X {border-radius: 25%;}
-        .O {border-radius: 50%;}
-        .cross {position: relative;transform:rotate(45deg);}
-        .cross:before, #cross:after {content: "";position: absolute;z-index: -1;background: #d00;}
-        .cross:before {left: 50%;width: 30%;margin-left: -15%;height: 100%;}
+        .O {border-radius: 50%; background-color: green;}
+        .cross {position: relative;transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);}
+        .cross:before, .cross:after {content: "";position: absolute;z-index: -1;background: #d00;}
+        .cross:before {left: 50%; width: 30%; margin-left: -15%; height: 100%;}
         .cross:after {top: 50%;height: 30%;margin-top: -15%;width: 100%;}
         </style>
 </head>
 <body>
 
     <script>
+        const winnArr = [   [0, 1, 2],[3, 4, 5],[6, 7, 8],
+                    [0, 3, 6],[1, 4, 7],[2, 5, 8],
+                    [0, 4, 8],[2, 4, 6],];
+
         let count =0;
+        let clicked = new Array (8);
+        let ActivGame = true;
 document.querySelector('body').innerHTML = `<div class="wrap"></div>`;
 let wrap = document.querySelector('.wrap');
 wrap.style.width = `300px`; wrap.style.height = `300px`;
@@ -39,24 +36,62 @@ for (i=0;i<=8; i++)
     let block = document.querySelector(`.class${i}`);
     block.style.width = `100px`
     block.style.height = `100px`
+    block.style.outline= `0.5px solid`;
     //console.log(block.getAttribute(`radius`));
     //block.setAttribute(`radius`, `true`);
     
     //console.dir(document.querySelector(`.class${i}`))
 }
+//0: "X" 1: "X" 2: "X" 3: "O" 4: "O" 5: "X" 6: "O" 7: "O" 8: "X"
 
-document.querySelector(`.class0`).addEventListener(`click`, function(){count++; document.querySelector(`.class0`).id = count%2 ? `X`: `O`;document.querySelector(`.class0`).classList.add(count%2 ? `cross`: `O`); console.log(document.querySelector(`.wrap`).childNodes[0].id); });  
-document.querySelector(`.class1`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class1`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class1`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[1].id); });  
-document.querySelector(`.class2`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class2`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class2`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[2].id); });  
-document.querySelector(`.class3`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class3`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class3`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[3].id); });  
-document.querySelector(`.class4`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class4`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class4`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[4].id); });  
-document.querySelector(`.class5`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class5`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class5`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[5].id); });  
-document.querySelector(`.class6`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class6`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class6`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[6].id); });  
-document.querySelector(`.class7`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class7`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class7`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[7].id); });  
-document.querySelector(`.class8`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class8`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class8`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[8].id); }); 
+const chekWin = () => {
+    winnArr.forEach ((i) => { //[0, 1, 2]
+        let a = i [0];
+        let b = i [1];
+        let c = i [2];
+        //console.log (a,b,c,clicked[a],clicked[b],clicked[c])
+        if (clicked[a] !== undefined && clicked[a] == clicked[b] && clicked[a] == clicked[c]) {ActivGame = false; console.log (`WIN: ++++++++${a} ${b} ${c}`)}
+    }
+    ) 
+} 
+
+const XO = (e) => {
+    if (count > 4){wrap.insertAdjacentHTML(`beforeEnd`,`<div'>WINN${count}</div>`); console.log(clicked)}
+    count++; 
+    console.log(`ERROR`, e)
+    document.querySelector(`.class${e}`).id = count%2 ? `X`: `O`;
+    document.querySelector(`.class${e}`).classList.add(count%2 ? `cross`: `O`); 
+    document.querySelector(`.class${e}`).style.outline= `0px`;
+    console.log(`в ячейке ${e} значение: ${document.querySelector(`.wrap`).childNodes[e].id}`);  
+    clicked[e] = document.querySelector(`.wrap`).childNodes[e].id;
+    chekWin ();
+}  ;
+const wrongWay = () => {
+    let a;
+    ActivGame ? alert(`Ячейка занята`)
+            : a=confirm(`Игра усе!`);
+    if (a)location.reload();
+
+}
+// for (i=0;i<9;i++){
+//     console.log(clicked[i])
+// document.querySelector(`.class${i}`).addEventListener(`click`, ()=>{if(clicked[i] === undefined && ActivGame){XO(i);} else{alert(`Ячейка занята`);} });  
+
+// }
+document.querySelector(`.class0`).addEventListener(`click`, ()=>{if(clicked[0] === undefined && ActivGame){XO(0);} else{wrongWay();} });  
+document.querySelector(`.class1`).addEventListener(`click`, ()=>{if(clicked[1] === undefined && ActivGame){XO(1);} else{wrongWay();} });
+document.querySelector(`.class2`).addEventListener(`click`, ()=>{if(clicked[2] === undefined && ActivGame){XO(2);} else{wrongWay();} });
+document.querySelector(`.class3`).addEventListener(`click`, ()=>{if(clicked[3] === undefined && ActivGame){XO(3);} else{wrongWay();} });
+document.querySelector(`.class4`).addEventListener(`click`, ()=>{if(clicked[4] === undefined && ActivGame){XO(4);} else{wrongWay();} });
+document.querySelector(`.class5`).addEventListener(`click`, ()=>{if(clicked[5] === undefined && ActivGame){XO(5);} else{wrongWay();} });
+document.querySelector(`.class6`).addEventListener(`click`, ()=>{if(clicked[6] === undefined && ActivGame){XO(6);} else{wrongWay();} });
+document.querySelector(`.class7`).addEventListener(`click`, ()=>{if(clicked[7] === undefined && ActivGame){XO(7);} else{wrongWay();} });
+document.querySelector(`.class8`).addEventListener(`click`, ()=>{if(clicked[8] === undefined && ActivGame){XO(8);} else{wrongWay();} });
+
 // document.querySelector(`.class8`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class8`).classList.add(count%2 ? `X`: `O`);});
 
-console.log(document.querySelector(`.wrap`).childNodes[0])
+//console.log(document.querySelector(`.wrap`).childNodes[0])
+//console.log(clicked)
 // let block = document.querySelector(`.class8`);
 // console.dir(block);
 
@@ -71,9 +106,6 @@ console.log(document.querySelector(`.wrap`).childNodes[0])
 
 
 
-const winnArr = [   [0, 1, 2],[3, 4, 5],[6, 7, 8],
-                    [0, 3, 6],[1, 4, 7],[2, 5, 8],
-                    [0, 4, 8],[2, 4, 6],];
 
             
     </script>
