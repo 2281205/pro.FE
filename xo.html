@@ -17,23 +17,59 @@
         .class6 {background-color: blue;}
         .class7 {background-color: violet;}
         .class8 {background-color: purple;}
+        .X {border-radius: 25%;}
+        .O {border-radius: 50%;}
+        .cross {position: relative;transform:rotate(45deg);}
+        .cross:before, #cross:after {content: "";position: absolute;z-index: -1;background: #d00;}
+        .cross:before {left: 50%;width: 30%;margin-left: -15%;height: 100%;}
+        .cross:after {top: 50%;height: 30%;margin-top: -15%;width: 100%;}
         </style>
 </head>
 <body>
 
     <script>
+        let count =0;
 document.querySelector('body').innerHTML = `<div class="wrap"></div>`;
 let wrap = document.querySelector('.wrap');
 wrap.style.width = `300px`; wrap.style.height = `300px`;
 console.dir(document.querySelector(`.wrap`))
-for (i=0;i<9; i++)
+for (i=0;i<=8; i++)
 {
     wrap.insertAdjacentHTML(`beforeEnd`,`<div class='class${i}'></div>`);
-    document.querySelector(`.class${i}`).style.width = `100px`
-    document.querySelector(`.class${i}`).style.height = `100px`
-    //document.querySelector(`.class${i}`).style.borderRadius = `50%`
-    console.dir(document.querySelector(`.class${i}`))
+    let block = document.querySelector(`.class${i}`);
+    block.style.width = `100px`
+    block.style.height = `100px`
+    //console.log(block.getAttribute(`radius`));
+    //block.setAttribute(`radius`, `true`);
+    
+    //console.dir(document.querySelector(`.class${i}`))
 }
+
+document.querySelector(`.class0`).addEventListener(`click`, function(){count++; document.querySelector(`.class0`).id = count%2 ? `X`: `O`;document.querySelector(`.class0`).classList.add(count%2 ? `cross`: `O`); console.log(document.querySelector(`.wrap`).childNodes[0].id); });  
+document.querySelector(`.class1`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class1`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class1`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[1].id); });  
+document.querySelector(`.class2`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class2`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class2`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[2].id); });  
+document.querySelector(`.class3`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class3`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class3`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[3].id); });  
+document.querySelector(`.class4`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class4`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class4`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[4].id); });  
+document.querySelector(`.class5`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class5`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class5`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[5].id); });  
+document.querySelector(`.class6`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class6`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class6`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[6].id); });  
+document.querySelector(`.class7`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class7`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class7`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[7].id); });  
+document.querySelector(`.class8`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class8`).setAttribute(`id`,count%2 ? `X`: `O`);document.querySelector(`.class8`).classList.add(count%2 ? `X`: `O`); console.log(document.querySelector(`.wrap`).childNodes[8].id); }); 
+// document.querySelector(`.class8`).addEventListener(`click`, function(){count++; console.log(count%2); document.querySelector(`.class8`).classList.add(count%2 ? `X`: `O`);});
+
+console.log(document.querySelector(`.wrap`).childNodes[0])
+// let block = document.querySelector(`.class8`);
+// console.dir(block);
+
+// block.setAttribute(`data-red`, `true`);
+// console.log(block.dataset.percent);
+
+// block.id = "";
+// //block.removeAttribute(`id`);
+
+// block.dataset.exist = "true";
+// console.log(block.dataset);
+
+
 
 const winnArr = [   [0, 1, 2],[3, 4, 5],[6, 7, 8],
                     [0, 3, 6],[1, 4, 7],[2, 5, 8],
