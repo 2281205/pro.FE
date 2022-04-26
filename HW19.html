@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HW</title>
+    <title>HW19</title>
     <style>
         .wrap{width: 600px;margin: 0 auto;}
         .menu{display:flex; justify-content:center;}
@@ -20,6 +20,7 @@
     </style>
 </head>
 <body>
+
 <script>
 let menu = [   {tab: 'Платежі',
 		        title: 'Ну де ще ви бачили безкоштовні перекази?',
@@ -37,42 +38,31 @@ let menu = [   {tab: 'Платежі',
 		        icon: 'settings',
                 iphone: 'https://www.monobank.ua/resources/1.0.17.1-1651000699000/img/main/home-settings-iphone-uk@2x.webp'},
             ];
-//menu.forEach( item => console.log(item) );
 
     document.querySelector(`body`).innerHTML = `<div class='wrap'><div class='menu'></div><div class='article'></div></div>`
     let wrap = document.querySelector(`.menu`),
         article = document.querySelector(`.article`);
-    
-const renderItem =(e) =>
-{
-console.log (e)
 
-article.innerHTML=`<div class='article_item'><img src="${menu[e].iphone}" alt="${menu[e].tab}"></div>
-                                        <div class='article_item'><div class='article_item-content'> 
-                                            <div class="icon" style="background-color:white"></div>
-                                            <div class="icon"><img src="./img/${menu[e].icon}.svg" alt="иконка ${menu[e].tab}"></div>
-                                            <h2><b> ${menu[e].title}</b></h2><br>
-                                                <p>${menu[e].description}</p>
-                                        </div></div>`;
+const renderIcon =e => {
+return `<div class="icon" style="background-color:white"></div>
+        <div class="icon"><img src="./img/${menu[e].icon}.svg" alt="иконка ${menu[e].tab}"></div>`;
+}
+
+const renderItem =e =>{
+article.innerHTML=` <div class='article_item'><img src="${menu[e].iphone}" alt="${menu[e].tab}"></div>
+                    <div class='article_item'><div class='article_item-content'> 
+                                            ${renderIcon(e)}
+                                            <h2><b>${menu[e].title}</b></h2><br>
+                                            <p>${menu[e].description}</p>
+                    </div></div>`;
 
 blocks.forEach(item=>item.classList.remove(`active`))
 blocks[e].classList.add(`active`)
+}   
 
-
-}      
-for (i=0;i<3; i++)
-{
-    wrap.innerHTML+=`<div class='menu_item'>${menu[i].tab}</div>`;
-
-}
-
-    
-    
+menu.forEach(e=>wrap.innerHTML+=`<div class='menu_item'>${e.tab}</div>`)
     const blocks = document.querySelectorAll(`.menu_item`);
-    blocks[0].addEventListener(`click`, ()=>{renderItem(0)})
-    blocks[1].addEventListener(`click`, ()=>{renderItem(1)})
-    blocks[2].addEventListener(`click`, ()=>{renderItem(2)})
- 
+blocks.forEach((e,i)=>e.addEventListener(`click`, ()=>{renderItem(i)}))
     </script>
 </body>
 </html>
