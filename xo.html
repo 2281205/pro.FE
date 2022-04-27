@@ -8,6 +8,7 @@
     <style>
         *{box-sizing: border-box;}
         .wrap   {background-color: bisque; margin: 3px auto;display: flex; flex-wrap: wrap;}
+        .class {width: 100px;height: 100px;outline: 0.5px solid;}
         .O {border-radius: 50%; border: 25px solid green;}
         .cross {position: relative;transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);}
         .cross:before, .cross:after {content: "";position: absolute;z-index: -1;background: #d00;}
@@ -16,7 +17,7 @@
     </style>
 </head>
 <body>
-
+    
     <script>
         const winnArr = [   [0, 1, 2],[3, 4, 5],[6, 7, 8],
                     [0, 3, 6],[1, 4, 7],[2, 5, 8],
@@ -31,39 +32,37 @@
     wrap.style.width = `300px`; wrap.style.height = `300px`;
 
         for (i=0;i<=8; i++)
-        {
-        wrap.insertAdjacentHTML(`beforeEnd`,`<div class='class${i}'></div>`);
-        let block = document.querySelector(`.class${i}`);
-        block.style.width = `100px`; block.style.height = `100px`; block.style.outline= `0.5px solid`;
-        }
+        {wrap.insertAdjacentHTML(`beforeEnd`,`<div class='class'></div>`);}
+    
+    let blocks = document.querySelectorAll('.class');
 
 const chekWin = () => {
     let chek;
-        winnArr.forEach ((i) => {
-            let a = i [0],
-                b = i [1],
-                c = i [2];
-            if (clicked[a] !== undefined && clicked[a] == clicked[b] && clicked[a] == clicked[c])
+    winnArr.forEach ((i) => {
+        let a = i [0],
+            b = i [1],
+            c = i [2];
+        if (ActivGame && clicked[a] !== undefined && clicked[a] == clicked[b] && clicked[a] == clicked[c])
+        //проверяем активна ли игра(если 2 комбинации выигрышны/убираем сравнение undefine/сравниваем значение х или о)
             {ActivGame = false; chek = true;
             wrap.insertAdjacentHTML(`beforeEnd`,`<br><h2'>WINN <b>${clicked[a]}</b></h2>`)
-                for (x=0;x<9;x++){
-                document.querySelector(`.class${x}`).style.opacity = (x == a || x == b || x == c) ?`1`:'0.3';}
+            blocks.forEach ((item,x)=>item.style.opacity = (x == a || x == b || x == c) ?`1`:'0.3')
             }
-        });
+    });
+
     if (count == 9 && !chek)
         {ActivGame = false;
         wrap.insertAdjacentHTML(`beforeEnd`,`<br><h2'>NO WINN ((</h2>`)
-        for (x=0;x<9;x++){
-            document.querySelector(`.class${x}`).style.opacity = '0.3';}
-        }     
+        blocks.forEach (item=>item.style.opacity = '0.3')
+        }
 } 
 
 const XO = (e) => {
     count++; 
-    document.querySelector(`.class${e}`).classList.add(count%2 ? `cross`: `O`); 
-    document.querySelector(`.class${e}`).style.outline= `0px`;
-    console.log(`в ячейке ${e} значение: ${count%2 ? `X`: `O`} count: ${count}`);  
+    blocks[e].classList.add(count%2 ? `cross`: `O`); 
+    blocks[e].style.outline= `0px`;
     clicked[e] = count%2 ? `X`: `O`;
+console.log(`в ячейке ${e} значение: ${count%2 ? `X`: `O`} count: ${count}`);  
     chekWin ();
 };
 
@@ -72,22 +71,12 @@ const wrongWay = () => {
     ActivGame ? alert(`Ячейка занята`)
             : a=confirm(`Играем заново?`);
     if (a)location.reload();
-
 }
-// for (i=0;i<9;i++){
-//     console.log(clicked[i])
-// document.querySelector(`.class${i}`).addEventListener(`click`, ()=>{if(clicked[i] === undefined && ActivGame){XO(i);} else{wrongWay();} });  
 
-// }
-document.querySelector(`.class0`).addEventListener(`click`, ()=>{if(clicked[0] === undefined && ActivGame){XO(0);} else{wrongWay();} });  
-document.querySelector(`.class1`).addEventListener(`click`, ()=>{if(clicked[1] === undefined && ActivGame){XO(1);} else{wrongWay();} });
-document.querySelector(`.class2`).addEventListener(`click`, ()=>{if(clicked[2] === undefined && ActivGame){XO(2);} else{wrongWay();} });
-document.querySelector(`.class3`).addEventListener(`click`, ()=>{if(clicked[3] === undefined && ActivGame){XO(3);} else{wrongWay();} });
-document.querySelector(`.class4`).addEventListener(`click`, ()=>{if(clicked[4] === undefined && ActivGame){XO(4);} else{wrongWay();} });
-document.querySelector(`.class5`).addEventListener(`click`, ()=>{if(clicked[5] === undefined && ActivGame){XO(5);} else{wrongWay();} });
-document.querySelector(`.class6`).addEventListener(`click`, ()=>{if(clicked[6] === undefined && ActivGame){XO(6);} else{wrongWay();} });
-document.querySelector(`.class7`).addEventListener(`click`, ()=>{if(clicked[7] === undefined && ActivGame){XO(7);} else{wrongWay();} });
-document.querySelector(`.class8`).addEventListener(`click`, ()=>{if(clicked[8] === undefined && ActivGame){XO(8);} else{wrongWay();} });
-    </script>
+ blocks.forEach( (e,i)=>{e.addEventListener(`click`, ()=>{ 
+        if (clicked[i] === undefined && ActivGame) {XO(i)} 
+        else {wrongWay()} ;
+    })});
+</script>
 </body>
 </html>
