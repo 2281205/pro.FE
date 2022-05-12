@@ -170,7 +170,8 @@ const USERS = [
 		email: 'oksana@gmail.com',
 		password: '123',
 		favourites: [1, 7],
-		status: true
+		status: false
+
 	}
 ];
 
@@ -183,14 +184,44 @@ const getStorageUsers = () => {
 }
 //console.log(getStorageUsers());
 
+//[{name: 'Ivan', email: 'ivan@gmail.com', password: '123', favourites: Array(3), status: false},
+//{name: 'Oksana', email: 'oksana@gmail.com', password: '123', favourites: Array(2), status: false}]
+
 const storageUsers = getStorageUsers();
 const userInSession = storageUsers.find(user => user.status === true);
-//console.log(userInSession)
+console.log(storageUsers)
+console.log(userInSession)
+
 
 // FOR login.html PAGE
 if (document.querySelector(`#LoginForm`))
 {
 	console.log (`IM IN LOGIN PAGE`)
+	const LoginForm = document.querySelector(`#LoginForm`);
+	LoginForm.addEventListener(`submit`, e => { 
+		e.preventDefault(); 
+		let email = e.target.querySelector(`input[data-name="email"]`).value.toLowerCase(),
+			password = e.target.querySelector(`input[data-name="password"]`).value,
+			rememberUser = storageUsers.find(user => user.email === email);
+		if (rememberUser && rememberUser.password === password)
+			{
+				console.log(`LOGIN IS ${rememberUser.email === email} AND PASS ${ rememberUser.password === password }`)
+				storageUsers.forEach(item =>{ if(item.email == email) {item.status = true} } )
+				localStorage.setItem('userName', JSON.stringify(storageUsers));	
+			}
+		else if(!rememberUser){
+			let err = e.target.querySelector(`.error`);
+			err.classList.add("active");
+			err.innerHTML = `Invalid email 🥵`;
+			setTimeout(()=>{err.classList.remove("active")}, 2000);
+		}
+		else {
+			let err = e.target.querySelector(`.error`);
+			err.classList.add("active");
+			err.innerHTML = `Invalid password 🥵`;
+			setTimeout(()=>{err.classList.remove("active")}, 2000);
+		}
+	});
 }
 
 //FOR Registor form
