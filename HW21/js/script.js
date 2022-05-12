@@ -169,32 +169,23 @@ const USERS = [
 		name: 'Oksana',
 		email: 'oksana@gmail.com',
 		password: '123',
-		favourites: [1, 7],
+		favourites: [1, 2, 3, 5],
 		status: false
 	}
 ];
-
- //localStorage.setItem('userName', 10);
 
 const getStorageUsers = () => {
     localStorage.getItem('userName') 	? JSON.parse(localStorage.getItem('userName'))
                                     	: localStorage.setItem('userName', JSON.stringify(USERS));
     return JSON.parse(localStorage.getItem('userName'))
 }
-//console.log(getStorageUsers());
 
-//[{name: 'Ivan', email: 'ivan@gmail.com', password: '123', favourites: Array(3), status: false},
-//{name: 'Oksana', email: 'oksana@gmail.com', password: '123', favourites: Array(2), status: false}]
-
-const storageUsers = getStorageUsers();
-const userInSession = storageUsers.find(user => user.status === true);
-console.log(storageUsers)
-console.log(userInSession)
+const storageUsers = getStorageUsers(),
+	 userInSession = storageUsers.find(user => user.status === true);
 
 // FOR login.html PAGE ++
 if (document.querySelector(`#LoginForm`))
 {
-	console.log (`IM IN LOGIN PAGE`)
 	const LoginForm = document.querySelector(`#LoginForm`);
 	LoginForm.addEventListener(`submit`, e => { 
 		e.preventDefault(); 
@@ -226,7 +217,6 @@ if (document.querySelector(`#LoginForm`))
 //FOR Registor form ++
 if (document.querySelector(`#RegistrationForm`))
 {
-	console.log (`IM IN REGISTOR PAGE`)
 	const RegistrationForm = document.querySelector(`#RegistrationForm`);
 	RegistrationForm.addEventListener(`submit`, e => { 
 		e.preventDefault(); 
@@ -256,10 +246,124 @@ if (document.querySelector(`#RegistrationForm`))
 	});
 }
 
+//FOR HEADER page
+if (document.querySelector(`#headerUser`))
+{
+	const headerUser = document.querySelector(`#headerUser`);
+	const headerFavourites = document.querySelector(`#headerFavourites`);
+	const headerLogout = document.querySelector(`#headerLogout`);
+	if (userInSession)
+	{
+		headerUser.innerHTML = userInSession.name;
+		headerUser.href = `favourites.html`;
+		headerFavourites.href = `favourites.html`;
+		const headerFavouritesCount = document.querySelector(`#headerFavouritesCount`);
+		headerFavouritesCount.innerHTML = userInSession.favourites.length;
+		headerLogout.classList.add(`active`);
+	}
+	headerLogout.addEventListener(`click`, e => { 
+		e.preventDefault(); 
+	//let userInSession = storageUsers.find(user => user.status === true);
+		userInSession.status = false;
+		localStorage.setItem('userName', JSON.stringify(storageUsers));	
+		document.location.href = `index.html`;
+	});
+console.log (`find:`, userInSession)
+}
+
+const getSection = (item) =>
+{
+	let categoriesWrap = document.querySelector(`#categoriesContainer`),
+		categories = document.createElement(`section`);
+		categoriesLabel = document.createElement(`h2`);
+		categoriesContainer = document.createElement(`div`);
+		
+		categories.className = `category`;
+		categories.setAttribute(`data-name`, `${item}`);
+		categoriesContainer.className = `category__container`;
+		categoriesLabel.innerHTML = `${item}`;
+
+		categoriesWrap.append(categories);
+		categories.append(categoriesLabel);
+		categories.append(categoriesContainer);
+
+	return document.querySelector( `section[data-name=${item}]`)
+}
+
+const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
+{
+	categories.forEach( item => {
+	let wrap = document.querySelector( `section[data-name=${item}]`) ? document.querySelector( `section[data-name=${item}]`) : getSection (item),
+		container = wrap.querySelector(`.category__container`),
+		product = document.createElement (`div`),
+		btnItem = document.createElement (`button`),
+		ImgLike = document.createElement (`img`),
+		ImgProd = document.createElement (`img`),
+		nameItem = document.createElement (`p`);
+		if (sale){
+			saleItem = document.createElement (`div`);
+			saleOld = document.createElement (`span`);
+			saleProc = document.createElement (`span`);
+			saleItem.className = `product__sale`;
+			saleOld.className = `product__sale--old`;
+			saleProc.className = `product__sale--percent`;
+			saleOld.innerHTML =`${price}`;
+			saleProc.innerHTML = `-${salePercent}%`;
+			}
+		priceItem = document.createElement (`div`);
+		priceTotal = document.createElement (`div`);
+
+		product.className = `product`;
+		btnItem.className = `product__favourite`;
+		ImgProd.className = `product__img`;
+		nameItem.className = `product__title`;
+		priceItem.className = `product__info`;
+		priceTotal.className = `product__price`;
+
+		ImgLike.setAttribute(`src`, `images/${userInSession && userInSession.favourites.indexOf(id) !== -1 
+													? `product__favourite--true` 
+													: `product__favourite`}.png`);		
+		ImgLike.setAttribute(`alt`, `favourite`);
+		ImgLike.setAttribute(`height`, `20`);
+
+		ImgProd.setAttribute(`src`, `images/products/${img}.png`);
+		ImgProd.setAttribute(`alt`, `${img}`);
+		ImgProd.setAttribute(`height`, `80`);
+
+		btnItem.addEventListener(`click`, e => { 
+			e.preventDefault(); 
+			if (!userInSession){document.location.href = `login.html`}
+			
+
+		console.log (`click!! ${id} and name: ${title}`)
+		});
+
+		nameItem.innerHTML =`${title}`
+		priceTotal.innerHTML = `$${ sale ? price-(price*(salePercent/100)) : price }`
+
+		container.append(product);
+		product.append(btnItem);
+		btnItem.append(ImgLike);
+		product.append(ImgProd);
+		product.append(nameItem);
+		if (sale){
+			product.append(saleItem);
+			saleItem.append(saleOld);
+			saleItem.append(saleProc);
+			}
+		product.append(priceItem);
+		priceItem.append(priceTotal);
+	})
+}
+
+
 //FOR index page
 if (document.querySelector(`#categoriesContainer`))
 {
-	console.log (`IM IN INDEX PAGE`)
+	const categoriesContainer = document.querySelector(`#categoriesContainer`);
+	
+
+	PRODUCTS.forEach(item => renderItems(item))
 }
 
 
