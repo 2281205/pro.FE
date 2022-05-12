@@ -164,5 +164,52 @@ const USERS = [
 		password: '123',
 		favourites: [9, 18, 7],
 		status: false
+	},
+	{
+		name: 'Oksana',
+		email: 'oksana@gmail.com',
+		password: '123',
+		favourites: [1, 7],
+		status: true
 	}
 ];
+
+ //localStorage.setItem('userName', 10);
+
+const getStorageUsers = () => {
+    localStorage.getItem('userName') 	? JSON.parse(localStorage.getItem('userName'))
+                                    	: localStorage.setItem('userName', JSON.stringify(USERS));
+    return JSON.parse(localStorage.getItem('userName'))
+}
+//console.log(getStorageUsers());
+
+const storageUsers = getStorageUsers();
+const userInSession = storageUsers.find(user => user.status === true);
+//console.log(userInSession)
+
+// FOR login.html PAGE
+if (document.querySelector(`#LoginForm`))
+{
+	console.log (`IM IN LOGIN PAGE`)
+}
+
+//FOR Registor form
+if (document.querySelector(`#RegistrationForm`))
+{
+	console.log (`IM IN REGISTOR PAGE`)
+}
+
+
+//FOR index page
+if (document.querySelector(`#categoriesContainer`))
+{
+	console.log (`IM IN INDEX PAGE`)
+}
+
+
+//FOR favourites.html  page
+if (userInSession)
+{
+	const favouriteTable = document.querySelector(`#favouriteTable`);
+	console.log (`IM IN favourites.html  page`)
+}
