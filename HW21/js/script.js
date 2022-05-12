@@ -171,7 +171,6 @@ const USERS = [
 		password: '123',
 		favourites: [1, 7],
 		status: false
-
 	}
 ];
 
@@ -192,8 +191,7 @@ const userInSession = storageUsers.find(user => user.status === true);
 console.log(storageUsers)
 console.log(userInSession)
 
-
-// FOR login.html PAGE
+// FOR login.html PAGE ++
 if (document.querySelector(`#LoginForm`))
 {
 	console.log (`IM IN LOGIN PAGE`)
@@ -208,6 +206,7 @@ if (document.querySelector(`#LoginForm`))
 				console.log(`LOGIN IS ${rememberUser.email === email} AND PASS ${ rememberUser.password === password }`)
 				storageUsers.forEach(item =>{ if(item.email == email) {item.status = true} } )
 				localStorage.setItem('userName', JSON.stringify(storageUsers));	
+				document.location.href = `favourites.html`;
 			}
 		else if(!rememberUser){
 			let err = e.target.querySelector(`.error`);
@@ -224,12 +223,38 @@ if (document.querySelector(`#LoginForm`))
 	});
 }
 
-//FOR Registor form
+//FOR Registor form ++
 if (document.querySelector(`#RegistrationForm`))
 {
 	console.log (`IM IN REGISTOR PAGE`)
+	const RegistrationForm = document.querySelector(`#RegistrationForm`);
+	RegistrationForm.addEventListener(`submit`, e => { 
+		e.preventDefault(); 
+		let name = e.target.querySelector(`input[data-name="name"]`).value,
+			email = e.target.querySelector(`input[data-name="email"]`).value.toLowerCase(),
+			password = e.target.querySelector(`input[data-name="password"]`).value.trim(),
+			passwordVerify = e.target.querySelector(`input[data-name="passwordVerify"]`).value.trim(),
+			rememberUser = storageUsers.find(user => user.email === email);
+		if ( !password || password !== passwordVerify ){
+				let err = e.target.querySelector(`.error`);
+				err.classList.add("active");
+				err.innerHTML = `Password not matches! or Empty!  🥵`;
+				setTimeout(()=>{err.classList.remove("active")}, 2000);
+			}	
+		else if(rememberUser && rememberUser.email == email){
+			let err = e.target.querySelector(`.error`);
+			err.classList.add("active");
+			err.innerHTML = `User with email ${email} already exist! 🥵`;
+			setTimeout(()=>{err.classList.remove("active")}, 2000);
+		}
+		else {
+			let newUser = { name: name, email: email, password: password, status: true, favourites: [] };
+			storageUsers.push(newUser);
+			localStorage.setItem('userName', JSON.stringify(storageUsers));	
+			document.location.href = `favourites.html`;
+		}
+	});
 }
-
 
 //FOR index page
 if (document.querySelector(`#categoriesContainer`))
