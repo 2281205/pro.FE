@@ -386,7 +386,6 @@ if (document.querySelector(`#categoriesContainer`))
 //FOR favourites.html  page
 if (document.querySelector(`#favouriteTable`))
 {
-	console.log (`IM IN favourites.html  page`)
 	const favouriteTable = document.querySelector(`#favouriteTable`);
 	let caption = document.createElement(`caption`),
 		thead =  document.createElement(`thead`);
