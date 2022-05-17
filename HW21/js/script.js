@@ -194,7 +194,6 @@ if (document.querySelector(`#LoginForm`))
 			rememberUser = storageUsers.find(user => user.email === email);
 		if (rememberUser && rememberUser.password === password)
 			{
-//console.log(`LOGIN IS ${rememberUser.email === email} AND PASS ${ rememberUser.password === password }`)
 				storageUsers.forEach(item =>{ if(item.email == email) {item.status = true} } )
 				localStorage.setItem('userName', JSON.stringify(storageUsers));	
 				document.location.href = `favourites.html`;
@@ -324,6 +323,7 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 													? `product__favourite--true` 
 													: `product__favourite`}.png`);		
 		ImgLike.setAttribute(`alt`, `favourite`);
+		ImgLike.setAttribute(`data-id`, `${id}`);
 		ImgLike.setAttribute(`height`, `20`);
 
 		ImgProd.setAttribute(`src`, `images/products/${img}.png`);
@@ -336,7 +336,7 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			{
 				if (userInSession.favourites.indexOf(id) !== -1)
 				{
-					ImgLike.setAttribute(`src`, `images/product__favourite.png`);
+					document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite.png`))
 					userInSession.favourites.splice(userInSession.favourites.indexOf(id), 1);
 
 					storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
@@ -345,7 +345,7 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 				}
 				else
 				{
-					ImgLike.setAttribute(`src`, `images/product__favourite--true.png`);
+					document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite--true.png`));
 					userInSession.favourites.push(id);
 
 					storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
@@ -357,7 +357,6 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			{
 				document.location.href = `login.html`
 			}
-		//console.log (`click!! ${id} and name: ${title}`)
 		});
 
 		nameItem.innerHTML =`${title}`
@@ -377,14 +376,6 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 		priceItem.append(priceTotal);
 	})
 }
-
-// const getFavoriteItem = (item => {
-// 	let favoriteItem = PRODUCTS.find(i => i.id === item);
-
-// 	console.log (`is ID in foo ${item}`)
-// 	console.log (favoriteItem)
-
-// });
 
 //FOR index page
 if (document.querySelector(`#categoriesContainer`))
@@ -412,44 +403,46 @@ if (document.querySelector(`#favouriteTable`))
 		userInSession.favourites.forEach(item => 
 		{let favoriteItem = PRODUCTS.find(i => i.id === item),
 			tr =  document.createElement(`tr`),
-			td = document.createElement(`td`);
+			tdItem = document.createElement(`td`),
+			tdPrice = document.createElement(`td`),
+			tdSale = document.createElement(`td`),
+			tdTotal = document.createElement(`td`),
+			tdLike = document.createElement(`td`),
+			btnLike = document.createElement (`button`),
+			ImgLike = document.createElement (`img`);
 
-			td.innerHTML = `<td>
-								<div class="item__info">
-									<img src="images/products/${favoriteItem.img}.png" alt="${favoriteItem.title}" height="100">
-									<div>
-										<p class="item__info--title">${favoriteItem.title}</p>
-									</div>
-								</div>
-							</td></td>
-							<td>$${favoriteItem.price}</td>`
+			btnLike.className = `item__favourite`;
+			ImgLike.setAttribute(`src`, `images/product__favourite--true.png`);
+			ImgLike.setAttribute(`alt`, `favourite`);
+			ImgLike.setAttribute(`height`, `20`);
+
+
+			btnLike.addEventListener(`click`, e => { 
+				e.preventDefault(); 
+				userInSession.favourites.splice(userInSession.favourites.indexOf(item), 1);
+				storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
+				localStorage.setItem('userName', JSON.stringify(storageUsers));	
+
+				headerFavouritesCount.innerHTML = userInSession.favourites.length;
+				tdItem.parentNode.parentNode.removeChild(tdItem.parentNode);
+				caption.innerHTML = userInSession.favourites.length>0 ? `Favourite Items` : ` NO Favourite Items!`;	
+			});
+
+			tdItem.innerHTML = `<div class="item__info"><img src="images/products/${favoriteItem.img}.png" alt="${favoriteItem.title}" height="100">
+									<div><p class="item__info--title">${favoriteItem.title}</p></div>
+								</div>`			
+			tdPrice.innerHTML = `$${favoriteItem.price}`
+			tdSale.innerHTML = favoriteItem.sale ? `<td><span class="item__sale">- ${favoriteItem.salePercent}%</span></td>` :`-`
+			tdTotal.innerHTML = `$${ favoriteItem.sale ? favoriteItem.price-(favoriteItem.price*(favoriteItem.salePercent/100)) : favoriteItem.price }`
 
 			tbody.append(tr);
-			tr.append(td);
-
-
-
-	// console.log (`is ID in foo ${item}`)
-	// console.log (favoriteItem)
+			tr.append(tdItem);
+			tr.append(tdPrice);
+			tr.append(tdSale);
+			tr.append(tdTotal);
+			tr.append(tdLike);
+			tdLike.append(btnLike);
+			btnLike.append(ImgLike);
+		}
+	) }
 }
-			) }
-
-	else {console.log (
-		
-		`FAVORITE IS NULL`, userInSession.favourites.length)}
-	
-}
-
-	
-
-// <!-- <tbody>
-// <tr>
-// 	<td><div class="item__info"><img src="images/products/cabriolet.png" alt="Cabriolet" height="100"><div><p class="item__info--title">Cabriolet</p></div></div></td>
-// 	<td>$900</td>
-// 	<td><span class="item__sale">- 25%</span></td>
-// 	<td>$675</td>
-
-// // 	<td>
-// 		<button class="item__favourite"><img src="images/product__favourite--true.png" alt="favourite" height="20"></button>
-// 	</td>
-// </tr>
