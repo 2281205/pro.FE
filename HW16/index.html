@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HW16</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        const 	gradation = {20: "satisfactory",55: "good",85: "very-good",100: "excellent"},
+		users = [
+	{	name: "Jack Smith",age: 23,img: "JackSmith",role: "student",courses: [
+			{"title": "Front-end Pro","mark": 20},
+			{"title": "Java Enterprise","mark": 100}]},
+	{	name: "Amal Smith",age: 20,img: "AmalSmith",role: "student"},
+	{	name: "Noah Smith",age: 43,img: "NoahSmith",role: "student",courses: [
+			{"title": "Front-end Pro","mark": 50}]},
+	{	name: "Charlie Smith",age: 18,img: "CharlieSmith",role: "student",courses: [
+			{"title": "Front-end Pro","mark": 75},
+			{"title": "Java Enterprise","mark": 23}]},
+	{	name: "Emily Smith",age: 30,img: "EmilySmith",role: "admin",courses: [
+			{"title": "Front-end Pro","score": 10,"lector": "Leo Smith"},
+			{"title": "Java Enterprise","score": 50,"lector": "David Smith"},
+			{"title": "QA","score": 75,"lector": "Emilie Smith"}]},
+	{	name: "Leo Smith",age: 253,img: "LeoSmith",role: "lector",courses: [
+			{"title": "Front-end Pro","score": 78,"studentsScore": 79},
+			{"title": "Java Enterprise","score": 85,"studentsScore": 85}]}];
+
+class User{
+    render (obj){
+    return (`<div class="user__info">
+                <div class="user__info--data">
+                <img src="images/users/${obj.img}.png" alt="${obj.name}" height="50">
+                <div class="user__naming"><p>Name: <b>${obj.name}</b></p><p>Age: <b>${obj.age}</b></p>
+            </div></div>
+                <div class="user__info--role student">
+                <img src="images/roles/${obj.role}.png" alt="${obj.role}" height="25"><p>${obj.role}</p>
+            </div></div>`);}
+
+    getMark (i){
+        for(let key in gradation)
+        {
+        if(i<=key) return gradation[key];
+        }
+    }
+
+    renderCourses (obj){  
+        let courseArr = [];
+        if (obj && obj[0].mark){courseArr.push('<div class="user__courses">');
+            for (let i=0; i<obj.length;i++){
+            courseArr.push(`<p class="user__courses--course student"><b>${obj[i].title}</b><span class="${this.getMark(obj[i].mark)}">${this.getMark(obj[i].mark)}</span></p>`)
+            }
+        courseArr.push('</div>');
+        }
+    return courseArr.join('');}
+}
+
+class Student extends User{
+    constructor()   {super();}
+}
+class Lector extends User{
+    constructor()   {super();}
+
+    renderCourses (obj){  
+        let courseArr = [];
+        if (obj && obj[0].studentsScore){courseArr.push('<div class="user__courses admin--info">');
+            for (let i=0; i<obj.length;i++){
+            courseArr.push(`<div class="user__courses--course lector"><p>Title: <b>${obj[i].title}</b></p>
+                    <p>Lector's score: <span class="${this.getMark(obj[i].score)}">${this.getMark(obj[i].score)}</span></p>
+                    <p>Average student's score: <span class="${this.getMark(obj[i].studentsScore)}">${this.getMark(obj[i].studentsScore)}</span></p></div>`)
+            }
+        courseArr.push('</div>');
+        }
+    return courseArr.join('');}
+}
+
+class Admin extends User{
+    constructor()   {super();}
+
+    renderCourses (obj){  
+        let courseArr = [];
+        if (obj && obj[0].lector){courseArr.push('<div class="user__courses admin--info">');
+            for (let i=0; i<obj.length;i++){
+            courseArr.push(`<div class="user__courses--course admin"><p>Title: <b>${obj[i].title}</b></p>
+                    <p>Admin's score: <span class="${this.getMark(obj[i].score)}">${this.getMark(obj[i].score)}</span></p>
+                    <p>Lector: <b>${obj[i].lector}</b></p></div>`)
+            }
+        courseArr.push('</div>');
+        }
+    return courseArr.join('');}
+}
+
+const copyofObject = (obj) => {
+let xx;
+switch (obj.role){  case 'student':xx=Student;break;
+                    case 'admin':xx=Admin;break;
+                    case 'lector':xx=Lector;break;}
+let newObj = new xx();
+    for(let key in obj){
+        let option = obj[key];
+        if(typeof option === `object` && !Array.isArray(option)){
+            copyofObject(option, newObj);
+        } else{
+            newObj[key] = option;
+        }
+    }
+    return newObj;
+}
+
+document.write(`<div class="users">`)
+console.log(`<div class="users">`)
+let usersArr = users.map(item => copyofObject(item)).forEach(item => document.write(`<div class="user">${item.render(item)}${item.renderCourses(item.courses)}</div>`));
+let usersArr2 = users.map(item => copyofObject(item))
+console.log(usersArr2)
+let userArr3 = usersArr2.forEach(item =>  console.log(`<div class="user">${item.render(item)}${item.renderCourses(item.courses)}</div>`));
+
+</script>
+</head>
+<body>
+</body>
+</html>
