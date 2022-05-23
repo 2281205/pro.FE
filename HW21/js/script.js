@@ -164,7 +164,7 @@ const USERS = [
 		password: '123',
 		favourites: [9, 18, 7],
 		orders: [{id: 2, count: 2},{id: 16, count: 4},{id: 1, count: 1}],
-		shoppingCart: [{id: 9, count: 1},{id: 3, count: 1}],
+		shoppingCart: [{id: 9, count: 1},{id: 3, count: 1},{id: 10, count: 1}],
 		status: false
 	},
 	{
@@ -186,6 +186,8 @@ const getStorageUsers = () => {
 
 const storageUsers = getStorageUsers(),
 	 userInSession = storageUsers.find(user => user.status === true);
+	
+	
 
 // FOR login.html PAGE ++
 if (document.querySelector(`#LoginForm`))
@@ -241,7 +243,7 @@ if (document.querySelector(`#RegistrationForm`))
 			setTimeout(()=>{err.classList.remove("active")}, 2000);
 		}
 		else {
-			let newUser = { name: name, email: email, password: password, status: true, favourites: [] };
+			let newUser = { name: name, email: email, password: password, status: true, favourites: [], orders: [], shoppingCart: []};
 			storageUsers.push(newUser);
 			localStorage.setItem('userName', JSON.stringify(storageUsers));	
 			document.location.href = `favourites.html`;
@@ -254,14 +256,22 @@ if (document.querySelector(`#headerUser`))
 {
 	const headerUser = document.querySelector(`#headerUser`);
 	const headerFavourites = document.querySelector(`#headerFavourites`);
+	const headerShoppingCart = document.querySelector(`#headerShoppingCart`);
 	const headerLogout = document.querySelector(`#headerLogout`);
 	if (userInSession)
 	{
+		localCartId = userInSession.shoppingCart.map ( item => item.id );
+		localOrderId = userInSession.orders.map ( item => item.id );
+		
 		headerUser.innerHTML = userInSession.name;
-		headerUser.href = `favourites.html`;
+		headerUser.href = `account.html`;
 		headerFavourites.href = `favourites.html`;
 		const headerFavouritesCount = document.querySelector(`#headerFavouritesCount`);
 		headerFavouritesCount.innerHTML = userInSession.favourites.length;
+
+		headerShoppingCart.href = `shoppingCart.html`;
+		const headerShoppingCartCount = document.querySelector(`#headerShoppingCartCount`);
+		headerShoppingCartCount.innerHTML = userInSession.shoppingCart.length;
 		headerLogout.classList.add(`active`);
 	}
 	headerLogout.addEventListener(`click`, e => { 
@@ -272,6 +282,7 @@ if (document.querySelector(`#headerUser`))
 		document.location.href = `index.html`;
 	});
 console.log (`find:`, userInSession)
+
 }
 
 const getSection = (item) =>
@@ -303,6 +314,7 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 		ImgLike = document.createElement (`img`),
 		ImgProd = document.createElement (`img`),
 		nameItem = document.createElement (`p`);
+
 		if (sale){
 			saleItem = document.createElement (`div`);
 			saleOld = document.createElement (`span`);
@@ -313,7 +325,15 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			saleOld.innerHTML =`${price}`;
 			saleProc.innerHTML = `-${salePercent}%`;
 			}
-		priceItem = document.createElement (`div`);
+
+	let	priceItem = document.createElement (`div`),
+		btnCart = document.createElement (`button`);
+
+		// <button class="product__cart product__cart--in">
+		// 						<img src="images/shopping-cart.png" alt="shopping cart" height="20">
+		// 					</button>
+
+
 		priceTotal = document.createElement (`div`);
 
 		product.className = `product`;
@@ -321,6 +341,31 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 		ImgProd.className = `product__img`;
 		nameItem.className = `product__title`;
 		priceItem.className = `product__info`;
+		btnCart.className = `product__cart`;
+
+		//btnCart.classList.add ("product__cart--in");
+
+		
+		//console.log(localCartId)
+		
+		userInSession && localCartId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--in");
+		userInSession && localOrderId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--ordered");
+
+		btnCart.innerHTML = `<img src="images/shopping-cart.png" alt="shopping cart" height="20">`
+		
+		btnCart.addEventListener(`click`, e => { 
+			e.preventDefault(); 
+			if (userInSession)
+			{
+			console.log(id);
+			}
+			else 
+			{
+				document.location.href = `login.html`
+			}
+		}
+			);
+
 		priceTotal.className = `product__price`;
 
 		ImgLike.setAttribute(`src`, `images/${userInSession && userInSession.favourites.indexOf(id) !== -1 
@@ -363,6 +408,8 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			}
 		});
 
+
+	
 		nameItem.innerHTML =`${title}`
 		priceTotal.innerHTML = `$${ sale ? price-(price*(salePercent/100)) : price }`
 
@@ -378,8 +425,48 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			}
 		product.append(priceItem);
 		priceItem.append(priceTotal);
+		priceItem.append(btnCart);
 	})
 }
+
+//FOR info page
+if (document.querySelector(`#userInfoName`))
+{
+	const userInfoName = document.querySelector(`#userInfoName`);
+	//console.log (`IM IN INFO PAGE`,userInfoName )
+	userInfoName.value = userInSession.name;
+	const userInfoEmail = document.querySelector(`#userInfoEmail`); 
+		userInfoEmail.innerHTML = userInSession.email;
+}
+
+//FOR info page -rename
+if(document.querySelector(`#userInfo`))
+{
+	const userInfo = document.querySelector(`#userInfo`);
+	userInfo.addEventListener(`submit`, e => { 
+		e.preventDefault();
+		let name = userInfoName.value.trim();
+		name ? userInSession.name = name : userInfoName.value ;	
+			//check for empty string
+		localStorage.setItem(`userName`, JSON.stringify(storageUsers));
+		location.reload();
+	})
+}
+
+//FOR info page -delete BTN
+if (document.querySelector(`#deleteAcc`))
+{
+	const deleteAcc = document.querySelector(`#deleteAcc`);
+	deleteAcc.addEventListener(`click`, e => { 
+		e.preventDefault();
+		let deleteIndex;
+		storageUsers.forEach((item,i) => item.email == userInSession.email ? deleteIndex = i : '' );
+		storageUsers.splice(deleteIndex, 1);		
+		localStorage.setItem('userName', JSON.stringify(storageUsers));	
+		document.location.href = `index.html`;
+	});
+}
+
 
 //FOR index page
 if (document.querySelector(`#categoriesContainer`))
