@@ -163,6 +163,8 @@ const USERS = [
 		email: 'ivan@gmail.com',
 		password: '123',
 		favourites: [9, 18, 7],
+		orders: [{id: 2, count: 2},{id: 16, count: 4},{id: 1, count: 1}],
+		shoppingCart: [{id: 9, count: 1},{id: 3, count: 1}],
 		status: false
 	},
 	{
@@ -170,6 +172,8 @@ const USERS = [
 		email: 'oksana@gmail.com',
 		password: '123',
 		favourites: [1, 2, 3, 5],
+		orders: [{id: 2, count: 2},{id: 3, count: 4},{id: 10, count: 3}],
+		shoppingCart: [{id: 5, count: 1},{id: 6, count: 6}],
 		status: false
 	}
 ];
