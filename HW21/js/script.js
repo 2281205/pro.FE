@@ -186,8 +186,167 @@ const getStorageUsers = () => {
 
 const storageUsers = getStorageUsers(),
 	 userInSession = storageUsers.find(user => user.status === true);
-	
-	
+
+const getSection = (item) =>
+	 {
+		 let categoriesWrap = document.querySelector(`#categoriesContainer`),
+			 categories = document.createElement(`section`);
+			 categoriesLabel = document.createElement(`h2`);
+			 categoriesContainer = document.createElement(`div`);
+			 
+			 categories.className = `category`;
+			 categories.setAttribute(`data-name`, `${item}`);
+			 categoriesContainer.className = `category__container`;
+			 categoriesLabel.innerHTML = `${item}`;
+	 
+			 categoriesWrap.append(categories);
+			 categories.append(categoriesLabel);
+			 categories.append(categoriesContainer);
+	 
+		 return document.querySelector( `section[data-name=${item}]`)
+}
+
+const btnCartFoo = (id) =>
+{
+	if (userInSession)
+	{
+		 if (localCartId.indexOf(id) !== -1) //remove from localstorage
+		 {
+		let localId = userInSession.shoppingCart.findIndex(i => i.id === id);
+		userInSession.shoppingCart.splice(localId, 1)
+		localCartId.splice(localId, 1)
+
+		document.querySelectorAll( `button[data-id="${id}"]`).forEach(e=>e.className = `product__cart`)
+		storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.shoppingCart = userInSession.shoppingCart} } )
+		localStorage.setItem('userName', JSON.stringify(storageUsers));	
+		headerShoppingCartCount.innerHTML = userInSession.shoppingCart.length;
+		 }
+		 else //add in localstorage
+		{
+		userInSession.shoppingCart.push({id,count: 1})
+		localCartId.push(id)
+
+		document.querySelectorAll( `button[data-id="${id}"]`).forEach(e=>e.className = `product__cart product__cart--in`)
+		storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.shoppingCart = userInSession.shoppingCart} } )
+		localStorage.setItem('userName', JSON.stringify(storageUsers));	
+		headerShoppingCartCount.innerHTML = userInSession.shoppingCart.length;
+		 }
+	}
+	else 
+	{
+		document.location.href = `login.html`
+	}
+}
+
+const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
+	 {
+		 categories.forEach( item => {
+		 let wrap = document.querySelector( `section[data-name=${item}]`) ? document.querySelector( `section[data-name=${item}]`) : getSection (item),
+			 container = wrap.querySelector(`.category__container`),
+			 product = document.createElement (`div`),
+			 btnItem = document.createElement (`button`),
+			 ImgLike = document.createElement (`img`),
+			 ImgProd = document.createElement (`img`),
+			 nameItem = document.createElement (`p`);
+	 
+			 if (sale){
+				 saleItem = document.createElement (`div`);
+				 saleOld = document.createElement (`span`);
+				 saleProc = document.createElement (`span`);
+				 saleItem.className = `product__sale`;
+				 saleOld.className = `product__sale--old`;
+				 saleProc.className = `product__sale--percent`;
+				 saleOld.innerHTML =`${price}`;
+				 saleProc.innerHTML = `-${salePercent}%`;
+				 }
+	 
+		 let	priceItem = document.createElement (`div`),
+			 btnCart = document.createElement (`button`);
+			 priceTotal = document.createElement (`div`);
+	 
+			 product.className = `product`;
+			 btnItem.className = `product__favourite`;
+			 ImgProd.className = `product__img`;
+			 nameItem.className = `product__title`;
+			 priceItem.className = `product__info`;
+			 btnCart.className = `product__cart`;
+			 btnCart.setAttribute(`data-id`, `${id}`);
+	 
+			 userInSession && localCartId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--in");
+			 userInSession && localOrderId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--ordered");
+	 
+			 btnCart.innerHTML = `<img src="images/shopping-cart.png" alt="shopping cart" height="20"><p>${id}</p>`
+			 
+			 btnCart.addEventListener(`click`, e => { 
+				 e.preventDefault(); 
+				 btnCartFoo(id);
+			 });
+	 
+			 priceTotal.className = `product__price`;
+	 
+			 ImgLike.setAttribute(`src`, `images/${userInSession && userInSession.favourites.indexOf(id) !== -1 
+														 ? `product__favourite--true` 
+														 : `product__favourite`}.png`);		
+			 ImgLike.setAttribute(`alt`, `favourite`);
+			 ImgLike.setAttribute(`data-id`, `${id}`);
+			 ImgLike.setAttribute(`height`, `20`);
+	 
+			 ImgProd.setAttribute(`src`, `images/products/${img}.png`);
+			 ImgProd.setAttribute(`alt`, `${img}`);
+			 ImgProd.setAttribute(`height`, `80`);
+	 
+			 btnItem.addEventListener(`click`, e => { 
+				 e.preventDefault(); 
+				 if (userInSession)
+				 {
+					 if (userInSession.favourites.indexOf(id) !== -1)
+					 {
+						 document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite.png`))
+						 userInSession.favourites.splice(userInSession.favourites.indexOf(id), 1);
+	 
+						 storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
+						 localStorage.setItem('userName', JSON.stringify(storageUsers));	
+						 headerFavouritesCount.innerHTML = userInSession.favourites.length;
+					 }
+					 else
+					 {
+						 document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite--true.png`));
+						 userInSession.favourites.push(id);
+	 
+						 storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
+						 localStorage.setItem('userName', JSON.stringify(storageUsers));	
+						 headerFavouritesCount.innerHTML = userInSession.favourites.length;
+					 }
+				 }
+				 else 
+				 {
+					 document.location.href = `login.html`
+				 }
+			 });
+		 
+			 nameItem.innerHTML =`${title}`
+			 priceTotal.innerHTML = `$${ sale ? price-(price*(salePercent/100)) : price }`
+	 
+			 container.append(product);
+			 product.append(btnItem);
+			 btnItem.append(ImgLike);
+			 product.append(ImgProd);
+			 product.append(nameItem);
+			 if (sale){
+				 product.append(saleItem);
+				 saleItem.append(saleOld);
+				 saleItem.append(saleProc);
+				 }
+			 product.append(priceItem);
+			 priceItem.append(priceTotal);
+			 priceItem.append(btnCart);
+		 })
+}	 
+
+
+
+
+
 
 // FOR login.html PAGE ++
 if (document.querySelector(`#LoginForm`))
@@ -266,6 +425,7 @@ if (document.querySelector(`#headerUser`))
 		headerUser.innerHTML = userInSession.name;
 		headerUser.href = `account.html`;
 		headerFavourites.href = `favourites.html`;
+
 		const headerFavouritesCount = document.querySelector(`#headerFavouritesCount`);
 		headerFavouritesCount.innerHTML = userInSession.favourites.length;
 
@@ -276,7 +436,6 @@ if (document.querySelector(`#headerUser`))
 	}
 	headerLogout.addEventListener(`click`, e => { 
 		e.preventDefault(); 
-	//let userInSession = storageUsers.find(user => user.status === true);
 		userInSession.status = false;
 		localStorage.setItem('userName', JSON.stringify(storageUsers));	
 		document.location.href = `index.html`;
@@ -285,158 +444,13 @@ console.log (`find:`, userInSession)
 
 }
 
-const getSection = (item) =>
-{
-	let categoriesWrap = document.querySelector(`#categoriesContainer`),
-		categories = document.createElement(`section`);
-		categoriesLabel = document.createElement(`h2`);
-		categoriesContainer = document.createElement(`div`);
-		
-		categories.className = `category`;
-		categories.setAttribute(`data-name`, `${item}`);
-		categoriesContainer.className = `category__container`;
-		categoriesLabel.innerHTML = `${item}`;
-
-		categoriesWrap.append(categories);
-		categories.append(categoriesLabel);
-		categories.append(categoriesContainer);
-
-	return document.querySelector( `section[data-name=${item}]`)
-}
-
-const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
-{
-	categories.forEach( item => {
-	let wrap = document.querySelector( `section[data-name=${item}]`) ? document.querySelector( `section[data-name=${item}]`) : getSection (item),
-		container = wrap.querySelector(`.category__container`),
-		product = document.createElement (`div`),
-		btnItem = document.createElement (`button`),
-		ImgLike = document.createElement (`img`),
-		ImgProd = document.createElement (`img`),
-		nameItem = document.createElement (`p`);
-
-		if (sale){
-			saleItem = document.createElement (`div`);
-			saleOld = document.createElement (`span`);
-			saleProc = document.createElement (`span`);
-			saleItem.className = `product__sale`;
-			saleOld.className = `product__sale--old`;
-			saleProc.className = `product__sale--percent`;
-			saleOld.innerHTML =`${price}`;
-			saleProc.innerHTML = `-${salePercent}%`;
-			}
-
-	let	priceItem = document.createElement (`div`),
-		btnCart = document.createElement (`button`);
-
-		// <button class="product__cart product__cart--in">
-		// 						<img src="images/shopping-cart.png" alt="shopping cart" height="20">
-		// 					</button>
-
-
-		priceTotal = document.createElement (`div`);
-
-		product.className = `product`;
-		btnItem.className = `product__favourite`;
-		ImgProd.className = `product__img`;
-		nameItem.className = `product__title`;
-		priceItem.className = `product__info`;
-		btnCart.className = `product__cart`;
-
-		//btnCart.classList.add ("product__cart--in");
-
-		
-		//console.log(localCartId)
-		
-		userInSession && localCartId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--in");
-		userInSession && localOrderId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--ordered");
-
-		btnCart.innerHTML = `<img src="images/shopping-cart.png" alt="shopping cart" height="20">`
-		
-		btnCart.addEventListener(`click`, e => { 
-			e.preventDefault(); 
-			if (userInSession)
-			{
-			console.log(id);
-			}
-			else 
-			{
-				document.location.href = `login.html`
-			}
-		}
-			);
-
-		priceTotal.className = `product__price`;
-
-		ImgLike.setAttribute(`src`, `images/${userInSession && userInSession.favourites.indexOf(id) !== -1 
-													? `product__favourite--true` 
-													: `product__favourite`}.png`);		
-		ImgLike.setAttribute(`alt`, `favourite`);
-		ImgLike.setAttribute(`data-id`, `${id}`);
-		ImgLike.setAttribute(`height`, `20`);
-
-		ImgProd.setAttribute(`src`, `images/products/${img}.png`);
-		ImgProd.setAttribute(`alt`, `${img}`);
-		ImgProd.setAttribute(`height`, `80`);
-
-		btnItem.addEventListener(`click`, e => { 
-			e.preventDefault(); 
-			if (userInSession)
-			{
-				if (userInSession.favourites.indexOf(id) !== -1)
-				{
-					document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite.png`))
-					userInSession.favourites.splice(userInSession.favourites.indexOf(id), 1);
-
-					storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
-					localStorage.setItem('userName', JSON.stringify(storageUsers));	
-					headerFavouritesCount.innerHTML = userInSession.favourites.length;
-				}
-				else
-				{
-					document.querySelectorAll( `img[data-id="${id}"]`).forEach(e=>e.setAttribute(`src`, `images/product__favourite--true.png`));
-					userInSession.favourites.push(id);
-
-					storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.favourites = userInSession.favourites} } )
-					localStorage.setItem('userName', JSON.stringify(storageUsers));	
-					headerFavouritesCount.innerHTML = userInSession.favourites.length;
-				}
-			}
-			else 
-			{
-				document.location.href = `login.html`
-			}
-		});
-
-
-	
-		nameItem.innerHTML =`${title}`
-		priceTotal.innerHTML = `$${ sale ? price-(price*(salePercent/100)) : price }`
-
-		container.append(product);
-		product.append(btnItem);
-		btnItem.append(ImgLike);
-		product.append(ImgProd);
-		product.append(nameItem);
-		if (sale){
-			product.append(saleItem);
-			saleItem.append(saleOld);
-			saleItem.append(saleProc);
-			}
-		product.append(priceItem);
-		priceItem.append(priceTotal);
-		priceItem.append(btnCart);
-	})
-}
-
 //FOR info page
 if (document.querySelector(`#userInfoName`))
 {
 	const userInfoName = document.querySelector(`#userInfoName`);
-	//console.log (`IM IN INFO PAGE`,userInfoName )
 	userInfoName.value = userInSession.name;
 	const userInfoEmail = document.querySelector(`#userInfoEmail`); 
-		userInfoEmail.innerHTML = userInSession.email;
+	userInfoEmail.innerHTML = userInSession.email;
 }
 
 //FOR info page -rename
@@ -466,7 +480,6 @@ if (document.querySelector(`#deleteAcc`))
 		document.location.href = `index.html`;
 	});
 }
-
 
 //FOR index page
 if (document.querySelector(`#categoriesContainer`))
@@ -500,12 +513,21 @@ if (document.querySelector(`#favouriteTable`))
 			tdLike = document.createElement(`td`),
 			btnLike = document.createElement (`button`),
 			ImgLike = document.createElement (`img`);
+			btnCart = document.createElement (`button`),
 
 			btnLike.className = `item__favourite`;
+			btnCart.className = `product__cart`;
+			localCartId.indexOf(favoriteItem.id) !== -1 && btnCart.classList.add ("product__cart--in");
+			btnCart.setAttribute(`data-id`, `${favoriteItem.id}`);
 			ImgLike.setAttribute(`src`, `images/product__favourite--true.png`);
 			ImgLike.setAttribute(`alt`, `favourite`);
 			ImgLike.setAttribute(`height`, `20`);
 
+			btnCart.innerHTML='<img src="images/shopping-cart.png" alt="shopping cart" height="20">';
+			btnCart.addEventListener(`click`, e => { 
+				e.preventDefault(); 
+				btnCartFoo(favoriteItem.id);
+			});
 
 			btnLike.addEventListener(`click`, e => { 
 				e.preventDefault(); 
@@ -531,8 +553,18 @@ if (document.querySelector(`#favouriteTable`))
 			tr.append(tdSale);
 			tr.append(tdTotal);
 			tr.append(tdLike);
+			tdLike.append(btnCart);
+
 			tdLike.append(btnLike);
 			btnLike.append(ImgLike);
 		}
 	) }
+}
+
+//FOR account.html page
+if(document.querySelector(`#orderTable`))
+{
+console.log(`IN ACCOUNT PAGE`)
+
+
 }
