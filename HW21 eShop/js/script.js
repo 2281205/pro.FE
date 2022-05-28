@@ -275,7 +275,7 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 			 userInSession && localCartId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--in");
 			 userInSession && localOrderId.indexOf(id) !== -1 && btnCart.classList.add ("product__cart--ordered");
 	 
-			 btnCart.innerHTML = `<img src="images/shopping-cart.png" alt="shopping cart" height="20"><p>${id}</p>`
+			 btnCart.innerHTML = `<img src="images/shopping-cart.png" alt="shopping cart" height="20">`		//<p>${id}</p>`		FOR DEBUG ADD ID NUMBEER IN BUTTON
 			 
 			 btnCart.addEventListener(`click`, e => { 
 				 e.preventDefault(); 
@@ -513,6 +513,7 @@ if (document.querySelector(`#favouriteTable`))
 			btnLike.className = `item__favourite`;
 			btnCart.className = `product__cart`;
 			localCartId.indexOf(favoriteItem.id) !== -1 && btnCart.classList.add ("product__cart--in");
+			localOrderId.indexOf(favoriteItem.id) !== -1 && btnCart.classList.add ("product__cart--ordered");
 			btnCart.setAttribute(`data-id`, `${favoriteItem.id}`);
 			ImgLike.setAttribute(`src`, `images/product__favourite--true.png`);
 			ImgLike.setAttribute(`alt`, `favourite`);
@@ -663,13 +664,18 @@ if(document.querySelector(`#shoppingCartTable`))
 
 			tdQuantity.addEventListener(`change`, e=>{
 				totalPrice.splice(totalPrice.indexOf(localPrice),1);
-				item.count = Math.round(e.target.value);
+				e.target.value>0 
+					? item.count = Math.round(e.target.value) 
+					: item.count; 
 				tdQuantity.innerHTML = `<td><input type="number" value="${item.count}" min="1" max="999"></td>`;
-				localPrice = shopItem.sale ? (shopItem.price-(shopItem.price*(shopItem.salePercent/100)))*item.count : shopItem.price*item.count;
+				localPrice = shopItem.sale 
+					? (shopItem.price-(shopItem.price*(shopItem.salePercent/100)))*item.count 
+					: shopItem.price*item.count;
 				totalPrice.push(localPrice);
 				tdTotal.innerHTML = `$${localPrice}`
 				storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.shoppingCart = userInSession.shoppingCart} } )
 				localStorage.setItem('userName', JSON.stringify(storageUsers));	
+
 				document.querySelector(`#orderSummaryTotal`).innerHTML =`$${totalPrice.length>0 ? totalPrice.reduce((a, b) => {return a + b;}) : 0}`
 			})
 
@@ -686,4 +692,31 @@ if(document.querySelector(`#shoppingCartTable`))
 	document.querySelector(`#orderSummaryTotal`).innerHTML =`$${totalPrice.length>0 ? totalPrice.reduce((a, b) => {return a + b;}) : 0}`
 };
 
+//FOR orderSummary BTN on shoppingCart.html page
+if( document.querySelector(`#orderSummary`))
+{
+	const orderSummary = document.querySelector(`#orderSummary`);
 
+	orderSummary.addEventListener(`submit`,(e)=>{
+	e.preventDefault(); 
+	if(userInSession.shoppingCart.length>0)
+	{
+		userInSession.shoppingCart.forEach(item => {
+			userInSession.orders.push(item);
+			userInSession.favourites.splice(userInSession.favourites.indexOf(item.id),1);	
+		});
+		userInSession.shoppingCart = [];
+		
+		storageUsers.forEach(item =>{ if(item.email == userInSession.email) 
+			{item.shoppingCart = userInSession.shoppingCart; 
+			item.orders = userInSession.orders; 
+			item.favourites = userInSession.favourites;
+		} } )
+		localStorage.setItem('userName', JSON.stringify(storageUsers));	
+		
+		alert(`your order has been paid! Have a good day 😜😜😜`)
+		document.location.href = `account.html`;
+	}
+	else{document.location.href = `index.html`}
+	})
+}
