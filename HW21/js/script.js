@@ -343,11 +343,6 @@ const renderItems = ({id,title,img,price,sale,salePercent,categories}) =>
 		 })
 }	 
 
-
-
-
-
-
 // FOR login.html PAGE ++
 if (document.querySelector(`#LoginForm`))
 {
@@ -564,7 +559,131 @@ if (document.querySelector(`#favouriteTable`))
 //FOR account.html page
 if(document.querySelector(`#orderTable`))
 {
-console.log(`IN ACCOUNT PAGE`)
+	const OrderTable = document.querySelector(`#orderTable`),
+			caption = document.createElement(`caption`),
+			thead =  document.createElement(`thead`),
+			tbody =  document.createElement(`tbody`);
+	
+	thead.innerHTML = `<tr><th>Item Description</th><th>Price</th><th>Sale</th><th>Quantity</th><th>Total</th></tr>`;
+	caption.innerHTML = userInSession.orders.length>0 ? `Ordered Items` : ` NO Ordered Items!`;
+	
+	OrderTable.append(caption);
+	OrderTable.append(thead);
+	OrderTable.append(tbody);
+	
+if(userInSession.orders.length>0) 
+	{
+		userInSession.orders.forEach(item => 
+		{
+			let ordersItem = PRODUCTS.find(i => i.id === item.id),
+			tr =  document.createElement(`tr`),
+			tdItem = document.createElement(`td`),
+			tdPrice = document.createElement(`td`),
+			tdQuantity = document.createElement(`td`),
+			tdSale = document.createElement(`td`),
+			tdTotal = document.createElement(`td`);
+		
+			tdItem.innerHTML = `<div class="item__info">
+					<img src="images/products/${ordersItem.img}.png" alt="${ordersItem.title}" height="100">
+					<div><p class="item__info--title">${ordersItem.title}</p></div>
+								</div>`;		
+			tdPrice.innerHTML = `$${ordersItem.price}`;
+			tdQuantity.innerHTML = `${item.count}`;
+			tdSale.innerHTML = ordersItem.sale 
+				? `<td><span class="item__sale">- ${ordersItem.salePercent}%</span></td>` 
+				:`-`;
+			
+			tdTotal.innerHTML = `$${ ordersItem.sale 
+				? (ordersItem.price-(ordersItem.price*(ordersItem.salePercent/100)))*item.count 
+				: ordersItem.price*item.count}`
+
+			tbody.append(tr);
+			tr.append(tdItem);
+			tr.append(tdPrice);
+			tr.append(tdSale);
+			tr.append(tdQuantity);
+			tr.append(tdTotal);
+		}
+	)};
+};
+
+//FOR shoppingCart.html page
+if(document.querySelector(`#shoppingCartTable`))
+{
+	const shoppinCartTable = document.querySelector(`#shoppingCartTable`),
+			caption = document.createElement(`caption`),
+			thead =  document.createElement(`thead`),
+			tbody =  document.createElement(`tbody`),
+			totalPrice = [];
+	
+	thead.innerHTML = `<tr><th>Item Description</th><th>Price</th><th>Sale</th><th>Quantity</th><th>Total</th><th>Action</th></tr>`;
+	caption.innerHTML = userInSession.shoppingCart.length>0 ? `Items in Shopping Cart` : ` NO Shopping Items!`;
+	
+	shoppinCartTable.append(caption);
+	shoppinCartTable.append(thead);
+	shoppinCartTable.append(tbody);
+
+	if(userInSession.shoppingCart.length>0) {
+
+		userInSession.shoppingCart.forEach(item => 
+		{let shopItem = PRODUCTS.find(i => i.id === item.id),
+			tr =  document.createElement(`tr`),
+			tdItem = document.createElement(`td`),
+			tdPrice = document.createElement(`td`),
+			tdSale = document.createElement(`td`),
+			tdQuantity = document.createElement(`td`),
+			tdTotal = document.createElement(`td`),
+			tdDel = document.createElement (`td`),
+			btnDel = document.createElement (`button`),
+			localPrice = shopItem.sale ? shopItem.price-(shopItem.price*(shopItem.salePercent/100)) : shopItem.price;
+
+			btnDel.className = `item__remove`;
+			btnDel.innerHTML='<img src="images/delete.png" alt="delete" height="20">';
+
+			btnDel.addEventListener(`click`, e => { 
+				btnCartFoo(shopItem.id)
+				tdItem.parentNode.parentNode.removeChild(tdItem.parentNode);
+				caption.innerHTML = userInSession.shoppingCart.length>0 
+					? `Items in Shopping Cart` 
+					: ` NO Shopping Items!`;
+				totalPrice.splice(totalPrice.indexOf(localPrice),1);
+				document.querySelector(`#orderSummaryTotal`).innerHTML =`$${totalPrice.length>0 ? totalPrice.reduce((a, b) => {return a + b;}) : 0}`
+			});
+
+			tdItem.innerHTML = `<div class="item__info"><img src="images/products/${shopItem.img}.png" alt="${shopItem.title}" height="100">
+									<div><p class="item__info--title">${shopItem.title}</p></div>
+								</div>`			
+			tdPrice.innerHTML = `$${shopItem.price}`
+			tdSale.innerHTML = shopItem.sale 
+				? `<td><span class="item__sale">- ${shopItem.salePercent}%</span></td>` 
+				:`-`;
+			tdQuantity.innerHTML = `<td><input type="number" value="${item.count}" min="1" max="999"></td>`;
+			tdTotal.innerHTML = `$${localPrice}`
+			totalPrice.push(localPrice);
+
+			tdQuantity.addEventListener(`change`, e=>{
+				totalPrice.splice(totalPrice.indexOf(localPrice),1);
+				item.count = Math.round(e.target.value);
+				tdQuantity.innerHTML = `<td><input type="number" value="${item.count}" min="1" max="999"></td>`;
+				localPrice = shopItem.sale ? (shopItem.price-(shopItem.price*(shopItem.salePercent/100)))*item.count : shopItem.price*item.count;
+				totalPrice.push(localPrice);
+				tdTotal.innerHTML = `$${localPrice}`
+				storageUsers.forEach(item =>{ if(item.email == userInSession.email) {item.shoppingCart = userInSession.shoppingCart} } )
+				localStorage.setItem('userName', JSON.stringify(storageUsers));	
+				document.querySelector(`#orderSummaryTotal`).innerHTML =`$${totalPrice.length>0 ? totalPrice.reduce((a, b) => {return a + b;}) : 0}`
+			})
+
+			tbody.append(tr);
+			tr.append(tdItem);
+			tr.append(tdPrice);
+			tr.append(tdSale);
+			tr.append(tdQuantity);
+			tr.append(tdTotal);
+			tr.append(tdDel);
+			tdDel.append(btnDel);
+		})
+	}
+	document.querySelector(`#orderSummaryTotal`).innerHTML =`$${totalPrice.length>0 ? totalPrice.reduce((a, b) => {return a + b;}) : 0}`
+};
 
 
-}
