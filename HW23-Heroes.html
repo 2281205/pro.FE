@@ -32,7 +32,6 @@
 				<input type="checkbox" data-name="heroFavourite">
 			</div>
 		</label>
-
 		<button>Add Hero</button>
 	</form>
 
@@ -64,7 +63,6 @@
 const API = "https://61c9d37520ac1c0017ed8eac.mockapi.io";
 
 let tableForm = document.querySelector('#heroesForm'),
-    btnForm = tableForm.querySelector(`button`),
     tableItem = document.querySelector('#heroesTable'),
         tbody = tableItem.querySelector('tbody');
 
@@ -96,17 +94,17 @@ const renderItem = (obj) =>
 
     BtnItem.addEventListener(`click`, e => { 
 		e.preventDefault(); 
-        console.log(`CLIK!! id remove ${obj.id}`)
-        BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
+        getObj(API+`/heroes/${obj.id}`, `DELETE`)
+        .then(delUsr => alert(`user ${delUsr.name} is deleted successfully`))
+        .then(() => {BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode)})
+        .catch(err => {console.error(err); console.log(`user: ${obj.name} with id ${obj.id} not DELETTED`); })
     });
 
     FavCheckbox.addEventListener(`click`, e => { 
-        //e.preventDefault(); 
-        let inputCheck = FavCheckbox.querySelector(`input`);
-      console.log(inputCheck.checked, `  id  `, obj.id)
-     //  console.dir(FavCheckbox)
-     //   console.log(`CLIK!! id ${obj.id}`)
-        //BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
+        let inputCheck = FavCheckbox.querySelector(`input`);   
+      getObj(API+`/heroes/${obj.id}`, `PUT`, {favourites:inputCheck.checked})
+        .then(() => {console.log(`status: ${inputCheck.checked} in id ${obj.id} change successfully!!`)})
+        .catch(err => {console.error(err);console.log(`status: ${inputCheck.checked} in id ${obj.id} not change`);})
     })
 }
 
@@ -114,72 +112,33 @@ getObj(API+`/universes`)
     .then(listArr => {
        document.querySelector(`select[data-name=heroComics]`).innerHTML = listArr.map(item => `<option value="${item.name}">${item.name}</option>`).join('')
     })
-    .then(
-()=>{
-        console.log(tableForm);
-
-        console.log(btnForm);
-    
-        btnForm.addEventListener(`click`, e => { 
+    .then(()=>{
+        tableForm.addEventListener(`submit`, e => { 
 		e.preventDefault(); 
-        console.log(`CLIK!! id remove ${e}`)
-
-        console.log(tableForm.querySelector(`input[data-name="heroName"]`).value);
-        console.log(tableForm.querySelector(`select[data-name="heroComics"]`).value);
-        console.log(tableForm.querySelector(`input[data-name="heroFavourite"]`).checked);
-
-     //   BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
-    });
-    
-    
-    
-    }
-    )
-
+        getObj(API+`/heroes`)
+            .then(heroArr => {
+                let heroAddName = tableForm.querySelector(`input[data-name="heroName"]`).value,
+                    heroAddComics = tableForm.querySelector(`select[data-name="heroComics"]`).value,
+                    heroAddFavor = tableForm.querySelector(`input[data-name="heroFavourite"]`).checked,
+                    findUsr = heroArr.find(usr => usr.name === tableForm.querySelector(`input[data-name="heroName"]`).value);
+                
+                findUsr 
+                    ? console.log(`юзер с таким именем уже есть в базе)`)
+                    : getObj(API+`/heroes`, `POST`, {name: heroAddName, comics: heroAddComics, favourites: heroAddFavor})
+                        .then(newUser => {renderItem(newUser); console.log(`user add with id(${newUser.id})`)})
+                        .catch(err => {console.error(err); alert(`no add user. PLEASE ADD LATER`)})
+            })
+            .catch(err => {console.error(err); alert(`no add user. PLEASE ADD LATER`)})
+        });
+    })
     .catch(err => {console.error(err); alert(`Error in load page. PLEASE REBOOT PAGE`)})
 
 getObj(API+`/heroes`)
     .then(heroArr => {
         heroArr.forEach (item => renderItem(item));
     })
-
-
-    // .then(
-    //     lastPostData => console.log(lastPostData)
-    // )
-    // .then(
-    //     () => getFile(API+`/posts`, `POST`, {body: "My Body", title: "My title", userId: 1})
-    // )
-    // .then(
-    //     newPost => console.log(newPost)
-    // )
-    // .then(
-    //     () => getFile(API+`/posts`, `POST`, {cat: `Kotik`})
-    // )
-    // .then(
-    //     newPost => console.log(newPost)
-    // )
-    // .then(
-    //     () => getFile(API+`/posts/1`, `PUT`, {body: `new PUT body`, cat:`Kotik`})
-    // )
-    // .then(
-    //     puttedPost => console.log(puttedPost)
-    // )
-    // .then(
-    //     () => getFile(API+`/posts/1`, `PATCH`, {body: `new PATCH body`, cat:`Kotik`})
-    // )
-    // .then(
-    //     patchPost => console.log(patchPost)
-    // )
-    // .then(
-    //     () => getFile(API+`/posts/1`, `DELETE`)
-    // )
-    // .then(
-    //     deletedPost => console.log(deletedPost)
-    // )
-    .catch(err => console.error(err))
+    .catch(err => console.error(err));
 
 </script>
-    
 </body>
 </html>
