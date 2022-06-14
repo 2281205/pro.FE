@@ -56,7 +56,7 @@
 						Favourite: <input type="checkbox">
 					</label>
 				</td>
-				<td><button>Delete</button></td>
+				<td><button>Delete x</button></td>
 			</tr>
 
 			<!-- <tr style="background-color:grey;">
@@ -67,15 +67,105 @@
 						Favourite: <input type="checkbox">
 					</label>
 				</td>
-				<td><button>Delete</button></td>
+				<td><button>Delete x</button></td>
 			</tr> -->
 
 		</tbody>
 	</table>
 
 <script>
-
 console.log(`It work!`)
+const API = "https://61c9d37520ac1c0017ed8eac.mockapi.io";
+
+
+const getFile = (file, method=`GET`, obj) => {
+    let options = {
+        method: method,
+        headers: {
+            "Content-type": "application/json"
+        }
+    }
+    if(obj){options.body = JSON.stringify(obj);}
+    return fetch(file, options)
+        .then(response => response.status>=200 && response.status<400 ? response.json() : Promise.reject(response.status));
+}
+
+
+const renderItem = (obj) =>
+{
+    console.log(obj.id ? obj.id : "non ID");
+    console.log(obj.name ? obj.name : "non name");
+    console.log(obj.comics ? obj.comics : "non comics");
+    console.log(obj.favourites ? obj.favourites : "favourites false");
+    let tableItem = document.querySelector('#heroesTable'),
+        tbody = tableItem.querySelector('tbody'),
+        tr = document.createElement(`tr`),
+        BtnItem = document.createElement(`td`);
+
+    console.log(tbody)
+
+    tr.innerHTML = `<td>${obj.name ? obj.name : "non name"}</td><td>${obj.comics ? obj.comics : "non comics"}</td>
+                    <td><label class="heroFavouriteInput">Favourite: <input type="checkbox" ${obj.favourites && "checked"}></label></td>
+				    `;
+    BtnItem.innerHTML = `<button>Delete ${obj.id ? obj.id : "non ID"}</button>`           
+    tbody.append(tr);
+    tr.append(BtnItem);
+    BtnItem.addEventListener(`click`, e => { 
+		e.preventDefault(); 
+        console.log(`CLIK!!`)
+    })
+
+    
+    console.log(BtnItem)
+}
+
+getFile(API+`/heroes`)
+    .then(posts => {
+        console.log(posts);
+        posts.forEach (item => renderItem(item));
+        
+        // let lastPostId = posts[posts.length-1].id;
+        // return Promise.all([
+        //     getFile(API+`/posts/${lastPostId}`),
+        //     getFile(API+`/comments?postId=${lastPostId}`),
+        //     getFile(API+`/posts/${lastPostId}/comments`)
+        // ]);
+    })
+    // .then(
+    //     lastPostData => console.log(lastPostData)
+    // )
+    // .then(
+    //     () => getFile(API+`/posts`, `POST`, {body: "My Body", title: "My title", userId: 1})
+    // )
+    // .then(
+    //     newPost => console.log(newPost)
+    // )
+    // .then(
+    //     () => getFile(API+`/posts`, `POST`, {cat: `Kotik`})
+    // )
+    // .then(
+    //     newPost => console.log(newPost)
+    // )
+    // .then(
+    //     () => getFile(API+`/posts/1`, `PUT`, {body: `new PUT body`, cat:`Kotik`})
+    // )
+    // .then(
+    //     puttedPost => console.log(puttedPost)
+    // )
+    // .then(
+    //     () => getFile(API+`/posts/1`, `PATCH`, {body: `new PATCH body`, cat:`Kotik`})
+    // )
+    // .then(
+    //     patchPost => console.log(patchPost)
+    // )
+    // .then(
+    //     () => getFile(API+`/posts/1`, `DELETE`)
+    // )
+    // .then(
+    //     deletedPost => console.log(deletedPost)
+    // )
+    .catch(err => console.error(err))
+
 </script>
     
 </body>
