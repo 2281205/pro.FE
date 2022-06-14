@@ -22,8 +22,8 @@
 		</label>
 		<label>
 			Comics: <select data-name="heroComics">
-				<option value="Marvel">Marvel</option>
-				<option value="DC">DC</option>
+				<!-- <option value="Marvel">Marvel</option>
+				<option value="DC">DC</option> -->
 			</select>
 		</label>
 		<label>
@@ -36,7 +36,6 @@
 		<button>Add Hero</button>
 	</form>
 
-
 	<table class="heroes__table" id="heroesTable">
 		<thead>
 			<tr>
@@ -46,19 +45,8 @@
 				<th>Actions</th>
 			</tr>
 		</thead>
+
 		<tbody>
-
-			<tr style="background-color:grey;">
-				<td>Iron Man</td>
-				<td>Marvel</td>
-				<td>
-					<label class="heroFavouriteInput">
-						Favourite: <input type="checkbox">
-					</label>
-				</td>
-				<td><button>Delete x</button></td>
-			</tr>
-
 			<!-- <tr style="background-color:grey;">
 				<td>Iron Man</td>
 				<td>Marvel</td>
@@ -69,16 +57,18 @@
 				</td>
 				<td><button>Delete x</button></td>
 			</tr> -->
-
 		</tbody>
 	</table>
 
 <script>
-console.log(`It work!`)
 const API = "https://61c9d37520ac1c0017ed8eac.mockapi.io";
 
+let tableForm = document.querySelector('#heroesForm'),
+    btnForm = tableForm.querySelector(`button`),
+    tableItem = document.querySelector('#heroesTable'),
+        tbody = tableItem.querySelector('tbody');
 
-const getFile = (file, method=`GET`, obj) => {
+const getObj = (file, method=`GET`, obj) => {
     let options = {
         method: method,
         headers: {
@@ -90,47 +80,70 @@ const getFile = (file, method=`GET`, obj) => {
         .then(response => response.status>=200 && response.status<400 ? response.json() : Promise.reject(response.status));
 }
 
-
 const renderItem = (obj) =>
 {
-    console.log(obj.id ? obj.id : "non ID");
-    console.log(obj.name ? obj.name : "non name");
-    console.log(obj.comics ? obj.comics : "non comics");
-    console.log(obj.favourites ? obj.favourites : "favourites false");
-    let tableItem = document.querySelector('#heroesTable'),
-        tbody = tableItem.querySelector('tbody'),
-        tr = document.createElement(`tr`),
+    let tr = document.createElement(`tr`),
         BtnItem = document.createElement(`td`);
 
-    console.log(tbody)
-
     tr.innerHTML = `<td>${obj.name ? obj.name : "non name"}</td><td>${obj.comics ? obj.comics : "non comics"}</td>
-                    <td><label class="heroFavouriteInput">Favourite: <input type="checkbox" ${obj.favourites && "checked"}></label></td>
-				    `;
+                    <td><label class="heroFavouriteInput">Favourite: <input type="checkbox" ${obj.favourites && "checked"}></label></td>`;
+    
     BtnItem.innerHTML = `<button>Delete ${obj.id ? obj.id : "non ID"}</button>`           
+    
     tbody.append(tr);
     tr.append(BtnItem);
+    let FavCheckbox = tr.querySelector(`.heroFavouriteInput`);
+
     BtnItem.addEventListener(`click`, e => { 
 		e.preventDefault(); 
-        console.log(`CLIK!!`)
-    })
+        console.log(`CLIK!! id remove ${obj.id}`)
+        BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
+    });
 
-    
-    console.log(BtnItem)
+    FavCheckbox.addEventListener(`click`, e => { 
+        //e.preventDefault(); 
+        let inputCheck = FavCheckbox.querySelector(`input`);
+      console.log(inputCheck.checked, `  id  `, obj.id)
+     //  console.dir(FavCheckbox)
+     //   console.log(`CLIK!! id ${obj.id}`)
+        //BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
+    })
 }
 
-getFile(API+`/heroes`)
-    .then(posts => {
-        console.log(posts);
-        posts.forEach (item => renderItem(item));
-        
-        // let lastPostId = posts[posts.length-1].id;
-        // return Promise.all([
-        //     getFile(API+`/posts/${lastPostId}`),
-        //     getFile(API+`/comments?postId=${lastPostId}`),
-        //     getFile(API+`/posts/${lastPostId}/comments`)
-        // ]);
+getObj(API+`/universes`)
+    .then(listArr => {
+       document.querySelector(`select[data-name=heroComics]`).innerHTML = listArr.map(item => `<option value="${item.name}">${item.name}</option>`).join('')
     })
+    .then(
+()=>{
+        console.log(tableForm);
+
+        console.log(btnForm);
+    
+        btnForm.addEventListener(`click`, e => { 
+		e.preventDefault(); 
+        console.log(`CLIK!! id remove ${e}`)
+
+        console.log(tableForm.querySelector(`input[data-name="heroName"]`).value);
+        console.log(tableForm.querySelector(`select[data-name="heroComics"]`).value);
+        console.log(tableForm.querySelector(`input[data-name="heroFavourite"]`).checked);
+
+     //   BtnItem.parentNode.parentNode.removeChild(BtnItem.parentNode);
+    });
+    
+    
+    
+    }
+    )
+
+    .catch(err => {console.error(err); alert(`Error in load page. PLEASE REBOOT PAGE`)})
+
+getObj(API+`/heroes`)
+    .then(heroArr => {
+        heroArr.forEach (item => renderItem(item));
+    })
+
+
     // .then(
     //     lastPostData => console.log(lastPostData)
     // )
