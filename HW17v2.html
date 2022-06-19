@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW17</title>
+    <script>
+    const astrologicalSigns = { Aries: {    startDate: {month: `March`,day: 21},
+                                            endDate: {month: `April`,day: 20}},
+
+                                Taurus: {   startDate: {month: `April`,day: 21},
+                                            endDate: {month: `May`,day: 21}},
+
+                                Gemini: {   startDate: {month: `May`,day: 22},
+                                            endDate: {month: `June`,day: 21}},
+
+                                Cancer: {   startDate: {month: `June`,day: 22},
+                                            endDate: {month: `July`,day: 22}},
+
+                                Leo: {      startDate: {month: `July`,day: 23},
+                                            endDate: {month: `August`,day: 21}},
+
+                                Virgo: {    startDate: {month: `August`,day: 22},
+                                            endDate: {month: `September`,day: 23}},
+
+                                Libra: {    startDate: {month: `September`,day: 24},
+                                            endDate: {month: `October`,day: 23}},
+
+                                Scorpio: {  startDate: {month: `October`,day: 24},
+                                            endDate: {month: `November`,day: 22}},
+                                            
+                            Sagittarius:{   startDate: {month: `November`,day: 23},
+                                            endDate: {month: `December`,day: 22}},
+
+                                Capricorn:{ startDate: {month: `December`,day: 23},
+                                            endDate: {month: `January`,day: 20}},
+
+                                Aquarius: { startDate: {month: `January`,day: 21},
+                                            endDate: {month: `February`,day: 19}},
+
+                                Pisces: {   startDate: {month: `February`,day: 20},
+                                            endDate: {month: `March`,day: 20}}
+                                }
+    const users =   [   {name: 'Larry Page',
+                        dayOfBirth: 26,
+                        monthOfBirth: `March`},
+
+                        {name: 'Bill Gates',
+                        dayOfBirth: 28,
+                        monthOfBirth: `October`},
+
+                        {name: 'Vasya Pupkin',
+                        dayOfBirth: 31,
+                        monthOfBirth: `December`},
+
+                        {name: 'Ded Moroz',
+                        dayOfBirth: 1,
+                        monthOfBirth: `January`},
+
+                        {name: 'Oleg Kotik',
+                        dayOfBirth: 20,
+                        monthOfBirth: `March`},
+
+                        {name: 'Anya Kotik',
+                        dayOfBirth: 19,
+                        monthOfBirth: `February`},
+
+                        {name: 'Mark Zuckerberg',
+                        dayOfBirth: 14,
+                        monthOfBirth: `May`}];
+
+class Time
+{
+    constructor(){}
+
+    get date(){return new Date()};
+    get day(){return new Date().getUTCDate()};
+    get month(){return new Date().getMonth()};
+    get monthNames(){return [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`]};
+    static monthName (month=new Date().getMonth())
+    {
+        let x = new Time();
+        x = x.monthNames[month]
+        return x
+    };
+}
+
+class Astrological extends Time
+{
+    constructor(){super();}
+
+    static astrologicalSign (day=new Date().getUTCDate(),month=Time.monthName())
+    {
+      if (typeof day == "object") {month=day.monthOfBirth; day=day.dayOfBirth};
+        for (let key in astrologicalSigns)
+        {
+            let currentMonth = astrologicalSigns[key];
+            if (month === currentMonth.startDate.month && day >= currentMonth.startDate.day || month === currentMonth.endDate.month && day <= currentMonth.startDate.day)
+            return key;
+        }  
+    };
+}
+
+class Human extends Astrological
+{
+    constructor(object) 
+    {   super();
+        for(let key in object)
+        {
+           this[key] = object[key];
+        }   
+    }
+    astrologicalSign ()
+    {
+    return `${this.name} is ${Astrological.astrologicalSign(this)}`;
+    }
+}
+
+let UsersArr = [];
+UsersArr=users  .map(obj=>new Human(obj))
+                .map(obj => {console.log(obj);return obj;}) //для проверки
+                .forEach(item => console.log(`user    Name:   ${item.name}
+          DOB:   ${item.dayOfBirth} ${item.monthOfBirth}
+ astrological:   ${item.astrologicalSign()}
+ ____________`));
+
+    console.log(`toTEST`)
+    for (i=0; i<12; i++)
+    {
+        let x = Math.round(Math.random() * 30);
+        x = 0 ? x++ : x;
+        let y = Time.monthName(i)
+        console.log (`        Random Date: ${x}   ${y}
+        Random astrological: ${Astrological.astrologicalSign(x,y)}`);
+    }
+    </script>
+</head>
+<body>
+</body>
+</html>

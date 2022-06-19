@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{box-sizing: border-box;} 
+        .wrapper{
+            border: 1px solid black;
+            background: tan;
+        }
+        .slider{
+          display: flex;
+        }
+        .block{
+		background: black;
+		position: relative;
+		left: 0;
+		top: 0;
+		transition: 0.3s;
+	}
+    </style>
+</head>
+<body>
+<script>
+    let mainW = window.innerWidth -30, //задаем жесткую ширину экрана, -30px что б видны были рамки
+        mainH = window.innerHeight -70, //задаем жесткую высоту экрана, -70px что б видны были рамки + ползунок скорости
+        blockSize =70, //задаем первоначальный размер квадрата
+        w=0,
+        h=0,
+        size=0, //малые переменные координат и размера квадрата(меняем с помощью рандома)
+        speed={}, //обьект - ссылочный тип данных. с помощью него передал значение скорости
+        wrapper = document.querySelector('body');
+        speed.num=250; //стартовое значение в мл.секундах
+
+    const getRandomNum = (max=100,min=0) => {
+        min = Math.ceil(min);max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;}
+    
+    const getRandomColor = () => {
+        let numbers = [];
+        for(let i=1; i<=3; i++){
+        numbers.push(getRandomNum(255,0));}
+    return `rgb(${numbers.join(`,`)})`;
+    }
+    //начинаю рендерить поле и ползунок
+    wrapper.innerHTML=`<div class="slider">
+                            <p>Speed:&nbsp;&nbsp;&nbsp;</p>
+                            <input type="range" min="120" max="1000" value="300" class="slider" id="myRange">
+                        </div>
+                        <div class="wrapper"></div>`;
+    //обратился в #myRange для снятия переменной скорости, запихнул в значение в обьект              
+    let slider = document.querySelector('#myRange');
+        slider.oninput = function() {speed.num = this.value}
+    //рисуем доску и сам квадрат    
+        wrapper = document.querySelector('.wrapper');
+        wrapper.style.width =`${mainW}px`; wrapper.style.height =`${mainH}px`;
+        
+        wrapper.innerHTML=`<div class="block"><div>`;
+
+    let block = document.querySelector(`.block`);
+        block.style.width =`${blockSize}px`; block.style.height =`${blockSize}px`;
+    //запустил цыкл 2х setTimeout, для того что б мог менять время срабатывания новых координат, цвета
+    let loop = setTimeout(function ticks()
+    {   
+        size=getRandomNum(blockSize,10); //задаем диапазон самого квадрата
+        w=getRandomNum(mainW-blockSize); //задаем максимальный диапазон для координат по ширине минус сам квадрат
+        h=getRandomNum(mainH-blockSize); //задаем максимальный диапазон для координат по ширине
+        
+        block.style.top =`${h}px`;block.style.left =`${w}px`;
+        block.style.width =`${size}px`;block.style.height =`${size}px`;
+        block.style.background =getRandomColor();block.style.borderRadius =`${getRandomNum(50,0)}%`; 
+    //отслеживаю все в консоли, так же запустил setTimeout для обновление нового значения времени   
+        console.log(`speed= ${speed.num}, w= ${w}, h= ${h} size= ${size} ,Width= ${window.innerWidth}, Height= ${window.innerHeight}`);
+        loop = setTimeout(ticks, speed.num);
+    }, 200);
+</script>
+</body>
+</html>
