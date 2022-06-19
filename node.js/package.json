@@ -1,0 +1,22 @@
+{
+  "name": "work.fe",
+  "version": "1.0.0",
+  "description": "first init",
+  "main": "node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified BLA BLA\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://2281205: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@github.com/2281205/work.FE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2281205/work.FE/issues"
+  },
+  "homepage": "https://github.com/2281205/work.FE#readme",
+  "dependencies": {
+    "electron": "^19.0.4"
+  }
+}
