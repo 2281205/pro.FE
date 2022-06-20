@@ -1,14 +1,13 @@
 const path = require('path');
 const url = require('url');
 const {app, BrowserWindow} = require('electron');
-
 let win;
-
-function createWindow() {
+function createWindow() 
+{
     win = new BrowserWindow({
         width: 700,
         height: 500,
-        frame: false,
+      //  frame: false,
       // transparent: true,
     });
 
@@ -18,24 +17,25 @@ function createWindow() {
         slashes: true
     }));
 
-   // win.webContents.openDevTools();
+   win.webContents.openDevTools();
 
-
-        // var remote = require('electron').remote;
-        // var close = document.querySelector('#close');
-        //     close.addEventListener("click", () =>  {
-        //     var window = remote.getCurrentWindow();
-        //     window.close();
-        //     }); 
-        // win.on('closed', () => {
-        // win = null;
-        // });
-
+    console.log(`++++`)
+// setTimeout(() => {
+//     console.log(`close app   ++++++++++`)
+//     app.quit();
+// }, 9000); 
 
 }
+ console.log(`here`)
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-    app.quit();
-});
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+// app.on('window-all-closed', () => {
+//     app.quit();
+// });

@@ -20,15 +20,12 @@
     <button id="close">CLOSE</button>
 </div>
     <script>
-        alert (`+++++`)
+         var close = document.querySelector('#close');
+         console.log(`in HTML here`)
+         console.log(close)
 
-
-        var remote = require('electron').remote;
-var close = document.querySelector('#close');
-close.addEventListener("click", () =>  {
-    var window = remote.getCurrentWindow();
-    window.close();
-}); 
+            close.addEventListener("click", () =>  { console.log(`+++`)
+            }); 
     </script>
 </body>
 </html>
