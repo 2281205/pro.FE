@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HW24-JS</title>
+    <title>HW24-JQuery</title>
     <link rel="icon" href="https://mc-astro.github.io/tesla-roadster-colors/favicon.ico" type="image/x-icon" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
 .logo{margin: 20px; width: 100px; }
 .title{text-align: center;color: #333333;filter: saturate(50%);}
@@ -55,44 +56,33 @@ h2{font-size: 50px;margin-top: 5px;font-weight: 500;line-height: 1;margin-bottom
 <script>
 const API = `https://raw.githubusercontent.com/brightestsirius/tesla/master/tesla.json`;
 
-const getObj = async (url) => {
-    let request = await fetch(url);
-    if(request.ok) return request.json();
-    else throw Error(request.status);
+const renderCars = (JQdata) => {
+    $.each(JQdata, function (index, value) {
+  
+        $("<div/>")
+            .attr('id',index)
+            .attr('class',`cars`)
+            .css('display', "none")
+            .html(`<img src="${value}" style="width:100%" alt="tesla roadster ${index}"><div class="text">${index}</div>`)
+            .appendTo(".slideshow-container");
+        
+        $("<span/>")
+            .attr('class',`dot ${index}`)
+            .appendTo(".color-container")
+            .on(`click`, () => {
+                $(`.cars`).css('display', "none");
+                $(`#${index}`).css('display', "block");}) 
+    });
+    $(`.cars:first`).css('display', "block")
 }
 
-const renderCars = async () => {
-    try{
-        let colorArr = await getObj(API),
-            carImg = document.querySelector(".slideshow-container"),
-            carBtn = document.querySelector(".color-container")
-
-        for (let key in colorArr) {
-            let currentSlide = document.createElement ('div'),
-                currentColor = document.createElement ('span');
-            currentSlide.id = key;
-            currentSlide.classList = `cars`;
-            currentSlide.style.display = 'none';
-            currentSlide.innerHTML = `<img src="${colorArr[key]}" style="width:100%" alt="tesla roadster ${key}"><div class="text">${key}</div>`
-            currentColor.classList = `dot ${key}`;
-                
-            carImg.append(currentSlide)
-            carBtn.append(currentColor)
-
-            currentColor.addEventListener(`click`, () => {
-                document.querySelectorAll( `.cars`).forEach(e=>e.style.display = 'none')
-                document.querySelector( `#${key}`).style.display = 'block';
-            })     
-        }
-
-        document.querySelector( `.cars`).style.display = 'block';
-    } catch(err){
-       alert(`LOAD PAGE ERROR`)
-       location.reload();
-    }
-}
-
-renderCars();
+$.ajax({
+	url : API,
+	method: 'GET',
+    dataType: 'json',
+	success: data => renderCars(data),
+	error: error => { alert(`LOAD PAGE ERROR`); location.reload();}
+})
 </script> 
 </body>
 </html>
