@@ -3,6 +3,11 @@ const root = ReactDOM.createRoot(domContainer);
 
 let     list = [],
         listDone =[],
+        styleTable = {},
+        styleUser = {
+            fontWeight: "bold",
+            color: "darkgreen",
+        },     
         renderList = <tr><th>ID</th><th>Name</th><th>Price</th></tr>;
 
 // render random Arr with obj {id: name: price:}
@@ -18,22 +23,34 @@ for (let i=1; i<=20; i++)
 }
 
 class UsersComponent extends React.Component{
-    constructor(props){
+    constructor(props)
+    {
         super(props);
 
         const removeUsr = setInterval(()=>{
-            let cutId = Math.floor(Math.random() * this.state.localUsr.length);
+            let cutId = Math.round(Math.random() * listDone.length);
+
+           if(this.state.localUsr[cutId])
+            {
+                this.state.localUsr[cutId].style = styleUser;
+                listDone.splice(this.state.localUsr.indexOf(cutId), 1);
+            }
+
+           if(!((this.state.localUsr.length)/2-listDone.length))
+            {
+               styleTable.halfPass=true;
+               console.log(`50% DONE!`);  
+            }
             
-            this.setState({
-               localUsr: this.state.localUsr.slice(0, -1),
-               //localUsr: this.state.localUsr.concat({id:22, name:'olegg', price:'1300'})
-            });
-  
-            if(!this.state.localUsr.length) {clearInterval(removeUsr); console.log(`DONE!`)};
+            if(!listDone.length)
+            {
+                clearInterval(removeUsr); 
+                console.log(`DONE!`);  
+                styleTable.borderWidth=20;
+            };
             
-            console.dir(this.state.localUsr);
-            console.log(cutId);
-        }, 1000);
+            this.setState({});
+        }, 500);
     }
 
     state = {
@@ -42,21 +59,22 @@ class UsersComponent extends React.Component{
     }
 
     render(){
-        return  <tbody>
-            {this.state.localUsr.map((user) =><tr key={user.id}>
+        return  <table style= {styleTable.borderWidth ? styleTable : undefined } className={styleTable.halfPass ? "halfPass" : undefined} >
+        <thead>
+                {renderList}
+        </thead>
+        
+        <tbody>
+            {this.state.localUsr.map((user) =><tr style= {user.style ? styleUser : undefined } key={user.id}>
                                                         <td>{user.id}</td>
                                                         <td>{user.name}</td>
                                                         <td>{user.price}</td>
                                                     </tr>)}
-                </tbody>}
+        </tbody>
+        </table>
+    }
 }
 
-const App = 
-<table>
-    <thead>
-            {renderList}
-    </thead>
-    <UsersComponent usr={list} usrId={listDone}/>
-</table>
+const App = <UsersComponent usr={list} usrId={listDone}/>
 
 root.render(App);

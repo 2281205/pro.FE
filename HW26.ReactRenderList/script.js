@@ -11,23 +11,28 @@ var root = ReactDOM.createRoot(domContainer);
 
 var list = [],
     listDone = [],
+    styleTable = {},
+    styleUser = {
+    fontWeight: "bold",
+    color: "darkgreen"
+},
     renderList = React.createElement(
-    'tr',
+    "tr",
     null,
     React.createElement(
-        'th',
+        "th",
         null,
-        'ID'
+        "ID"
     ),
     React.createElement(
-        'th',
+        "th",
         null,
-        'Name'
+        "Name"
     ),
     React.createElement(
-        'th',
+        "th",
         null,
-        'Price'
+        "Price"
     )
 );
 
@@ -57,50 +62,65 @@ var UsersComponent = function (_React$Component) {
 
 
         var removeUsr = setInterval(function () {
-            var cutId = Math.floor(Math.random() * _this.state.localUsr.length);
+            var cutId = Math.round(Math.random() * listDone.length);
 
-            _this.setState({
-                localUsr: _this.state.localUsr.slice(0, -1)
-                //localUsr: this.state.localUsr.concat({id:22, name:'olegg', price:'1300'})
-            });
+            if (_this.state.localUsr[cutId]) {
+                _this.state.localUsr[cutId].style = styleUser;
+                listDone.splice(_this.state.localUsr.indexOf(cutId), 1);
+            }
 
-            if (!_this.state.localUsr.length) {
-                clearInterval(removeUsr);console.log('DONE!');
+            if (!(_this.state.localUsr.length / 2 - listDone.length)) {
+                styleTable.halfPass = true;
+                console.log("50% DONE!");
+            }
+
+            if (!listDone.length) {
+                clearInterval(removeUsr);
+                console.log("DONE!");
+                styleTable.borderWidth = 20;
             };
 
-            console.dir(_this.state.localUsr);
-            console.log(cutId);
-        }, 1000);
+            _this.setState({});
+        }, 500);
         return _this;
     }
 
     _createClass(UsersComponent, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
-                'tbody',
-                null,
-                this.state.localUsr.map(function (user) {
-                    return React.createElement(
-                        'tr',
-                        { key: user.id },
-                        React.createElement(
-                            'td',
-                            null,
-                            user.id
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            user.name
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            user.price
-                        )
-                    );
-                })
+                "table",
+                { style: styleTable.borderWidth ? styleTable : undefined, className: styleTable.halfPass ? "halfPass" : undefined },
+                React.createElement(
+                    "thead",
+                    null,
+                    renderList
+                ),
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.state.localUsr.map(function (user) {
+                        return React.createElement(
+                            "tr",
+                            { style: user.style ? styleUser : undefined, key: user.id },
+                            React.createElement(
+                                "td",
+                                null,
+                                user.id
+                            ),
+                            React.createElement(
+                                "td",
+                                null,
+                                user.name
+                            ),
+                            React.createElement(
+                                "td",
+                                null,
+                                user.price
+                            )
+                        );
+                    })
+                )
             );
         }
     }]);
@@ -108,15 +128,6 @@ var UsersComponent = function (_React$Component) {
     return UsersComponent;
 }(React.Component);
 
-var App = React.createElement(
-    'table',
-    null,
-    React.createElement(
-        'thead',
-        null,
-        renderList
-    ),
-    React.createElement(UsersComponent, { usr: list, usrId: listDone })
-);
+var App = React.createElement(UsersComponent, { usr: list, usrId: listDone });
 
 root.render(App);
