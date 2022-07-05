@@ -9,11 +9,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var domContainer = document.querySelector('#root');
 var root = ReactDOM.createRoot(domContainer);
 
-var isTrue = true,
-    successClass = 'success',
-    failClass = 'fail',
-    list = [],
-    userID = [],
+var list = [],
     renderList = React.createElement(
     'tr',
     null,
@@ -32,9 +28,9 @@ var isTrue = true,
         null,
         'Price'
     )
-),
-    users = ['Katya', 'rrrr', 'Sasha', 'Viktor'];
+);
 
+// render random Arr with obj {id: name: price:}
 for (var i = 1; i <= 20; i++) {
     var obj = {
         id: i,
@@ -42,40 +38,7 @@ for (var i = 1; i <= 20; i++) {
         name: Math.random().toString(36).slice(2)
     };
     list.push(obj);
-
-    //userID += <tr><th>{obj.id}</th><th>{obj.name}</th><th>{obj.price}</th></tr>;
 }
-userID = list.map(function (item) {
-    return '<tr><th>' + item.id + '</th><th>' + item.name + '</th><th>' + item.price + '</th></tr>';
-}).join('');
-console.log(list);
-
-var optionalText = isTrue ? React.createElement(
-    'span',
-    null,
-    'Optional text'
-) : undefined;
-
-// setTimeout(()=>{
-//     users.push(`New user`);
-//     console.log(users);
-// },1000);
-
-// Component + State = dynamic re-render
-
-// Functional-component
-
-// function UsersComponent(myProps){
-//     if(myProps.friends){
-//         return <ul>
-//             {myProps.friends.map((user,index) => <li key={index}>{user}</li>)}
-//         </ul>;
-//     }
-// }
-//list.forEach(item => renderList += <tr><th>{item.id}</th><th>{item.name}</th><th>{item.price}</th></tr>)
-//console.log(renderList);
-
-// Class-component
 
 var UsersComponent = function (_React$Component) {
     _inherits(UsersComponent, _React$Component);
@@ -83,29 +46,9 @@ var UsersComponent = function (_React$Component) {
     function UsersComponent(props) {
         _classCallCheck(this, UsersComponent);
 
-        // setTimeout(()=>{
-        //     this.setState({
-        //         x: this.state.x+1,
-        //         dog: "Oleg",
-        //         localFriends: this.state.localFriends.concat(["New friend", "Old friend"])
-        //     })
-        // }, 1000);
-
-        // const removeFriend = setInterval(()=>{
-        //     this.setState({
-        //         localFriends: this.state.localFriends.slice(0, -1)
-        //     });
-
-        //     if(!this.state.localFriends.length) clearInterval(removeFriend);
-        //     console.log(this.state.localFriends);
-        // }, 1000);
         var _this = _possibleConstructorReturn(this, (UsersComponent.__proto__ || Object.getPrototypeOf(UsersComponent)).call(this, props));
 
-        _this.state = {
-            x: 10,
-            dog: 'Brodyaga',
-            localFriends: _this.props.friends ? JSON.parse(JSON.stringify(_this.props.friends)) : []
-        };
+        console.dir(_this);
         return _this;
     }
 
@@ -113,74 +56,22 @@ var UsersComponent = function (_React$Component) {
         key: 'render',
         value: function render() {
             return React.createElement(
-                'table',
+                'tr',
                 null,
                 React.createElement(
-                    'thead',
+                    'td',
                     null,
-                    renderList
+                    this.props.usr.id
                 ),
                 React.createElement(
-                    'tbody',
+                    'td',
                     null,
-                    userID,
-                    React.createElement(
-                        'tr',
-                        null,
-                        React.createElement(
-                            'th',
-                            null,
-                            'Firstname'
-                        ),
-                        React.createElement(
-                            'th',
-                            null,
-                            'Lastname'
-                        ),
-                        React.createElement(
-                            'th',
-                            null,
-                            'Age'
-                        )
-                    ),
-                    React.createElement(
-                        'tr',
-                        null,
-                        React.createElement(
-                            'td',
-                            null,
-                            'Jill'
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            'Smith'
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            '50'
-                        )
-                    ),
-                    React.createElement(
-                        'tr',
-                        null,
-                        React.createElement(
-                            'td',
-                            null,
-                            'Eve'
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            'Jackson'
-                        ),
-                        React.createElement(
-                            'td',
-                            null,
-                            '94'
-                        )
-                    )
+                    this.props.usr.name
+                ),
+                React.createElement(
+                    'td',
+                    null,
+                    this.props.usr.price
                 )
             );
         }
@@ -190,12 +81,23 @@ var UsersComponent = function (_React$Component) {
 }(React.Component);
 
 var App = React.createElement(
-    'div',
+    'table',
     null,
-    React.createElement(UsersComponent, { friends: list }),
-    React.createElement('hr', null)
+    React.createElement(
+        'thead',
+        null,
+        renderList
+    ),
+    React.createElement(
+        'tbody',
+        null,
+        React.createElement(UsersComponent, { usr: list[0] }),
+        React.createElement(UsersComponent, { usr: list[1] }),
+        React.createElement(UsersComponent, { usr: list[2] }),
+        React.createElement(UsersComponent, { usr: list[3] }),
+        React.createElement(UsersComponent, { usr: list[4] }),
+        React.createElement(UsersComponent, { usr: list[5] })
+    )
 );
-//userID = list.map(item => <tr><th>{item.id}</th><th>{item.name}</th><th>{item.price}</th></tr>)
-console.log(userID);
 
 root.render(App);
