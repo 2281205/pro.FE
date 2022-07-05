@@ -47,6 +47,8 @@ for (var i = 1; i <= 20; i++) {
     listDone.push(obj.id);
 }
 
+var indexDone = listDone.length;
+
 var UsersComponent = function (_React$Component) {
     _inherits(UsersComponent, _React$Component);
 
@@ -63,18 +65,22 @@ var UsersComponent = function (_React$Component) {
 
         var removeUsr = setInterval(function () {
             var cutId = Math.round(Math.random() * listDone.length);
+            //FOR DEBUG IN LOG
+            console.log(cutId);
+            console.log(listDone);
 
-            if (_this.state.localUsr[cutId]) {
+            if (!isNaN(listDone[cutId])) {
                 _this.state.localUsr[cutId].style = styleUser;
-                listDone.splice(_this.state.localUsr.indexOf(cutId), 1);
+                listDone[cutId] = "Done";
+                indexDone--;
             }
 
-            if (!(_this.state.localUsr.length / 2 - listDone.length)) {
+            if (!(_this.state.localUsr.length / 2 - indexDone)) {
                 styleTable.halfPass = true;
                 console.log("50% DONE!");
             }
 
-            if (!listDone.length) {
+            if (!indexDone) {
                 clearInterval(removeUsr);
                 console.log("DONE!");
                 styleTable.borderWidth = 20;

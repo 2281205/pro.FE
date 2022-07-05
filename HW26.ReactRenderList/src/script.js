@@ -22,6 +22,8 @@ for (let i=1; i<=20; i++)
     listDone.push(obj.id);
 }
 
+let indexDone=listDone.length;
+
 class UsersComponent extends React.Component{
     constructor(props)
     {
@@ -29,20 +31,24 @@ class UsersComponent extends React.Component{
 
         const removeUsr = setInterval(()=>{
             let cutId = Math.round(Math.random() * listDone.length);
+//FOR DEBUG IN LOG
+            console.log(cutId)
+            console.log(listDone)
 
-           if(this.state.localUsr[cutId])
+           if(!isNaN(listDone[cutId]))
             {
                 this.state.localUsr[cutId].style = styleUser;
-                listDone.splice(this.state.localUsr.indexOf(cutId), 1);
+                listDone[cutId]="Done";
+                indexDone--;
             }
 
-           if(!((this.state.localUsr.length)/2-listDone.length))
+           if(!((this.state.localUsr.length)/2-indexDone))
             {
                styleTable.halfPass=true;
                console.log(`50% DONE!`);  
             }
             
-            if(!listDone.length)
+            if(!indexDone)
             {
                 clearInterval(removeUsr); 
                 console.log(`DONE!`);  
