@@ -10,6 +10,7 @@ var domContainer = document.querySelector('#root');
 var root = ReactDOM.createRoot(domContainer);
 
 var list = [],
+    listDone = [],
     renderList = React.createElement(
     'tr',
     null,
@@ -38,6 +39,7 @@ for (var i = 1; i <= 20; i++) {
         name: Math.random().toString(36).slice(2)
     };
     list.push(obj);
+    listDone.push(obj.id);
 }
 
 var UsersComponent = function (_React$Component) {
@@ -48,7 +50,27 @@ var UsersComponent = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (UsersComponent.__proto__ || Object.getPrototypeOf(UsersComponent)).call(this, props));
 
-        console.dir(_this);
+        _this.state = {
+            localUsr: _this.props.usr ? JSON.parse(JSON.stringify(_this.props.usr)) : [],
+            localUsrId: _this.props.usrId ? JSON.parse(JSON.stringify(_this.props.usrId)) : []
+        };
+
+
+        var removeUsr = setInterval(function () {
+            var cutId = Math.floor(Math.random() * _this.state.localUsr.length);
+
+            _this.setState({
+                localUsr: _this.state.localUsr.slice(0, -1)
+                //localUsr: this.state.localUsr.concat({id:22, name:'olegg', price:'1300'})
+            });
+
+            if (!_this.state.localUsr.length) {
+                clearInterval(removeUsr);console.log('DONE!');
+            };
+
+            console.dir(_this.state.localUsr);
+            console.log(cutId);
+        }, 1000);
         return _this;
     }
 
@@ -56,23 +78,29 @@ var UsersComponent = function (_React$Component) {
         key: 'render',
         value: function render() {
             return React.createElement(
-                'tr',
+                'tbody',
                 null,
-                React.createElement(
-                    'td',
-                    null,
-                    this.props.usr.id
-                ),
-                React.createElement(
-                    'td',
-                    null,
-                    this.props.usr.name
-                ),
-                React.createElement(
-                    'td',
-                    null,
-                    this.props.usr.price
-                )
+                this.state.localUsr.map(function (user) {
+                    return React.createElement(
+                        'tr',
+                        { key: user.id },
+                        React.createElement(
+                            'td',
+                            null,
+                            user.id
+                        ),
+                        React.createElement(
+                            'td',
+                            null,
+                            user.name
+                        ),
+                        React.createElement(
+                            'td',
+                            null,
+                            user.price
+                        )
+                    );
+                })
             );
         }
     }]);
@@ -88,16 +116,7 @@ var App = React.createElement(
         null,
         renderList
     ),
-    React.createElement(
-        'tbody',
-        null,
-        React.createElement(UsersComponent, { usr: list[0] }),
-        React.createElement(UsersComponent, { usr: list[1] }),
-        React.createElement(UsersComponent, { usr: list[2] }),
-        React.createElement(UsersComponent, { usr: list[3] }),
-        React.createElement(UsersComponent, { usr: list[4] }),
-        React.createElement(UsersComponent, { usr: list[5] })
-    )
+    React.createElement(UsersComponent, { usr: list, usrId: listDone })
 );
 
 root.render(App);
