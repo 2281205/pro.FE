@@ -3,7 +3,6 @@
     width: 95vw;
     margin: 0 auto;
     border-radius: 20px;
-    /* padding-bottom: 20%; */
 }
 
 .heading, .container {
@@ -20,10 +19,10 @@
     width: 20%;
     display: flex;
     justify-content:space-around;
-    margin: 20px;
+    margin: 10px 40px;
     font-size: 1.3rem;
 }
-    .heading-link a{ text-decoration: none; }
+    .heading-link a{ text-decoration: none;padding: 5px; }
 
 .heading-ShopCart{
     font-size: 1.5rem;
@@ -37,8 +36,8 @@
 .heading-logo{
     margin: 5px;
     width: 30%;
+    opacity: 50%;
 }
-
 
 .container-aside{
     display: flex;
@@ -52,15 +51,26 @@
     opacity: 50%;
     padding: 10px;
 }
-    .container-aside--item:hover{ opacity: 100%; }
-
+    .container-aside--item:hover, .heading-logo:hover{ opacity: 100%; cursor: pointer;}
 
 .container-content{
 display: flex;
 justify-content: space-around;
 flex-wrap:wrap
-/* height: 30vh; */
+}
 
+.container-content--userForm{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    margin-left: 5%;
+}
+
+.container-content--error{
+background-color: palevioletred;
+position: absolute;
+padding: 2%;
+display: none;
 }
 
 .container-content--item{
@@ -70,6 +80,5 @@ display: flex;
 flex-direction: column;
 align-items:center;
 }
-
     .container-content--item img { width: 100%; }
     .container-content--item button { margin-top: 5%; }
