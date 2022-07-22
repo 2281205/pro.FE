@@ -1,15 +1,15 @@
-const       API = `https://62c4bdb47d83a75e39ffee8a.mockapi.io`
+const   API = `https://62c4bdb47d83a75e39ffee8a.mockapi.io`;
 
 const controller  = async (url, method=`GET`, obj) => {
-        let options = { method,
-                        headers:{ "Content-type": "application/json" }
-                      };
-            if(obj) options.body = JSON.stringify(obj);
-            let request = await fetch(url, options);
-    if(request.ok){
-        return request.json();}
+    let options = { method,
+                    headers:{ "Content-type": "application/json" }
+                  };
+    if(obj) options.body = JSON.stringify(obj);
+    let request = await fetch(url, options);
+    if(request.ok){ return request.json(); }
     else{ throw request.status; }
 }
+
 let UsrCount = 0;
 const getRest = async () => await controller(API+`/rest`)
 const getUser = async () => await controller(API+`/restUser`)
@@ -32,7 +32,13 @@ const getUserArr = async () => {
     }
 };
 
-const render = obj => {
+const getUserLogin = () =>{
+    let storageUsers = JSON.parse(localStorage.getItem('userName'))
+    if (storageUsers.status) {console.log(`singl true`); return true;}
+    else return false;
+}
+
+const renderProduct = obj => {
     let ItemDoc = document.querySelector(`.container-content`);
 ItemDoc.innerHTML ='';
     obj.product.forEach(item=>
@@ -65,9 +71,6 @@ ItemDoc.innerHTML ='';
     });  
 }
 
-let LocalUser = {};
-  //  localRest = {};
-
 const restRender = async () => {
     try{
         let restArr = await getRest();
@@ -75,27 +78,25 @@ const restRender = async () => {
     restArr.forEach(item=>
     {
        let  RestAside = document.querySelector(`.container-aside`);
-       let RestLogo =document.createElement(`img`);
+       let RestLogo = document.createElement(`img`);
        RestLogo.className = "container-aside--item";
        RestLogo.id = `REST${item.id}`;
        RestLogo.setAttribute (`src`, `${item.logo}`);
        RestAside.append(RestLogo)
-    let btn = document.querySelector( `#REST${item.id}`);
-    btn.addEventListener('click', (e)=>{
-       let storageUsers = JSON.parse(localStorage.getItem('userName'))
-        console.log(storageUsers)
-        if (storageUsers.status) 
+
+        let btn = document.querySelector( `#REST${item.id}`);
+        btn.addEventListener('click', (e)=>{
+        if (getUserLogin()) {
+        document.querySelector(`#userLogOut`).style.removeProperty("display");
         restArr.forEach(inner=>{
             let localID = document.querySelector(`#REST`+inner.id);
             localID.id == btn.id ? localID.style.opacity=`100%` : localID.removeAttribute("style");
-        render(item);
+        renderProduct(item);
+        })}
+        else{restLogin(item)};
+        })
     })
-    else{restLogin(item)};
-
-    })
-})
     } catch(err){
-
         console.log(`OH!! IN CATCH`);
         console.log(err);
     }
@@ -145,16 +146,14 @@ const restLogin = async (localRest) => {
     LoginForm.addEventListener(`submit`, e => { 
         storageUsers = JSON.parse(localStorage.getItem('userName'))
 		e.preventDefault(); 
-        console.log(storageUsers)
 		let email = e.target.querySelector(`input[data-name="email"]`).value,
 			password = e.target.querySelector(`input[data-name="password"]`).value,
 			rememberUser = storageUsers.find(user => user.email === email);
-
 		if (rememberUser && rememberUser.password === password)
 			{
                 storageUsers.forEach(item =>{ if(item.email == email) {item.status = true;	localStorage.setItem('userName', JSON.stringify(item));	} } )
-				document.querySelector(`#userLogOut`).style.removeProperty("display");
-                render(localRest);
+	document.querySelector(`#userLogOut`).style.removeProperty("display");
+                renderProduct(localRest);
             }
 		else if(!rememberUser){
 			let err = e.target.querySelector(`.container-content--error`);
@@ -168,13 +167,10 @@ const restLogin = async (localRest) => {
 			err.innerHTML = `Invalid password 🥵`;
 			setTimeout(()=>{err.style.removeProperty("display")}, 2000);
 		}
-
     })
-
 
     RegistrationForm.addEventListener(`submit`,async e => { 
         storageUsers = JSON.parse(localStorage.getItem('userName'))
-        console.log(storageUsers)
 		e.preventDefault(); 
 		let name = e.target.querySelector(`input[data-name="name"]`).value,
 			email = e.target.querySelector(`input[data-name="email"]`).value.toLowerCase(),
@@ -195,21 +191,13 @@ const restLogin = async (localRest) => {
 		}
 		else {
 			let newUser = { name: name, email: email, password: password, orders: [], shoppingCart: []};
-			console.log(newUser);
-           
-        let addedUser = await controller(API+`/restUser`, `POST`, newUser)
-                .then(()=>{console.log(newUser);})
+            let addedUser = await controller(API+`/restUser`, `POST`, newUser)
                 .then(()=>{newUser.status= true; localStorage.setItem('userName', JSON.stringify(newUser));} )
-
-			//localStorage.setItem('userName', JSON.stringify(newUser));	
-		//document.location.href = `index.html`;
-            render(localRest);
+            document.querySelector(`#userLogOut`).style.removeProperty("display");
+            renderProduct(localRest);
 		}
 	});
 }
-
-
-
 
 
 restRender();
