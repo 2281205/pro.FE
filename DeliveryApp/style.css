@@ -82,3 +82,16 @@ align-items:center;
 }
     .container-content--item img { width: 100%; }
     .container-content--item button { margin-top: 5%; }
+
+.container-content--order{
+display: flex;
+flex-direction: column;
+align-items:center;
+}
+    .container-content--order img { width: 30%; }
+
+.container-wrap{
+display: flex;
+align-items:center;
+}
+    .container-wrap *{margin: 0 auto;}

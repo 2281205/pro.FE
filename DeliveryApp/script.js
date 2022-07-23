@@ -38,6 +38,21 @@ const getUserLogin = () =>{
     else return false;
 }
 
+const setUserLogOut = async (e) =>
+{
+    if (getUserLogin()){
+        let storageUsers = JSON.parse(localStorage.getItem('userName'))
+        console.log(storageUsers)
+        if(storageUsers.shoppingCart.length) {
+            let addedUser = await controller(API+`/restUser/${storageUsers.id}`, `PUT`, shoppingCart=`+++`)
+            console.log(`in if:  ${storageUsers.shoppingCart.length} ***`)}
+
+        localStorage.removeItem('userName');
+        document.querySelector(`#userLogOut`).style.display='none';
+       //location.reload()
+    }
+}
+
 const renderProduct = obj => {
     let ItemDoc = document.querySelector(`.container-content`);
 ItemDoc.innerHTML ='';
@@ -52,21 +67,19 @@ ItemDoc.innerHTML ='';
                     <button>Buy This   <b>${item.nameProduct} ${item.optional ? item.optional : ''}</b></button>`;
         ItemDoc.append(ItemDiv);
         ItemDiv.addEventListener(`click`,()=>{
-
-            //let newOrder = { restId:obj.id, productName:, email: email, password: password, orders: [], shoppingCart: []};
-		//	console.log(newUser);
-           
-        // let addedUser = await controller(API+`/restUser`, `POST`, newUser)
-        //         .then(()=>{console.log(newUser);})
-        //         .then(()=>{newUser.status= true; localStorage.setItem('userName', JSON.stringify(newUser));} )
-
+            let  storageUsers = JSON.parse(localStorage.getItem('userName'))
         document.querySelector('#headerShoppingCartCount').innerHTML=++UsrCount;
+        storageUsers.shoppingCart.push({id:obj.id,product:item.nameProduct,count:1, price:item.price})
+      
+
+
+        console.log(`name:`, storageUsers.shoppingCart)
         console.log(`localuser: `, localStorage.getItem('userName'));
         console.log(`MAGAZ ID: `, obj.id);
         console.log(`MAGAZ name: `, obj.name);
         console.log(`MAGAZ product: `, item.nameProduct);
         console.log(`MAGAZ price: `, item.price);
-
+            
         })
     });  
 }
@@ -75,6 +88,11 @@ const restRender = async () => {
     try{
         let restArr = await getRest();
         let userArr = await getUserArr()
+        document.querySelector(`#userLogOut`).addEventListener(`click`, e =>{
+            e.preventDefault();
+            console.log(`click!`)
+            setUserLogOut();
+        })
     restArr.forEach(item=>
     {
        let  RestAside = document.querySelector(`.container-aside`);
@@ -85,6 +103,7 @@ const restRender = async () => {
        RestAside.append(RestLogo)
 
         let btn = document.querySelector( `#REST${item.id}`);
+       
         btn.addEventListener('click', (e)=>{
         if (getUserLogin()) {
         document.querySelector(`#userLogOut`).style.removeProperty("display");
@@ -198,6 +217,7 @@ const restLogin = async (localRest) => {
 		}
 	});
 }
+
 
 
 restRender();
