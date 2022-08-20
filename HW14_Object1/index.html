@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW14</title>
+    <script>
+
+    let obj =   {
+                x: 10,
+                y: 20,
+                inner: {x: 20,z: 30},
+                foo2: {k: 23,p: 13}
+                },
+        newObj = {};    //newObj = {x: 20,y: 20,z: 30,k: 23,p: 13}
+    
+    function convert (x)
+    {
+        let y ={};
+        for(let i in x)
+        {   
+            if (typeof(x[i]) == 'object') 
+            {
+                for(let ii in x[i]) {y[ii] = x[i][ii];}
+            } 
+            else 
+            {
+                y [i] = x[i];};
+            }
+        return y;
+     }  
+
+    console.log(obj);
+    console.log(newObj);
+    console.log(`    ***
+    ***
+    ***`);
+    newObj = convert(obj);
+    console.log(obj);
+    console.log(newObj);
+
+     
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

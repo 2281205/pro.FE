@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW14</title>
+    <style>
+        table, tr, td{border: 1px solid; border-collapse: collapse;}
+        td{text-align: center; padding:5px;}
+    </style>
+    <script>
+        let users = [
+                    ["john","red",5,["ball", "book", "pen"]],
+                    ["becky","blue",10,["tape", "backpack", "pen"]],
+                    ["susy","red",55,["ball", "eraser", "pen"]],
+                    ["tyson","green",1,["book", "pen"]],],
+            userName = [];
+        console.log(`INFO:  `,users);
+
+        users.forEach(item => userName.push(`${item[0]}!`)); 
+        console.log(`TASK1: `,userName);
+   
+        let userMap = users.map(item => {let x = item[0]; x+= `?`; return x});
+        console.log(`TASK2: `,userMap);
+
+        let userOnlyRed = users.filter(item => item[1] == `red`);
+        console.log(`TASK3: `,userOnlyRed);
+  
+        let sum = userOnlyRed.map(item => item[2]).reduce((x,item) => x+item);
+        console.log(`TASK4: `,sum);
+        
+        let render = userOnlyRed.map(item => item.join(`</td><td>`));
+        
+        document.write(`<table><TR><TD>${render.join(`</TR><TR><TD>`)}
+        <tfoot><TD colspan="4">Final summ: ${sum} </TD></tfoot></table>`); 
+   </script>
+</head>
+<body>
+</body>
+</html>

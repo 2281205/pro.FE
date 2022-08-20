@@ -38,5 +38,5 @@ myPromise
         }
     )
    
-//http://djotto.dyndns.org/work.fe/data.json
-//http://djotto.dyndns.org/work.fe/data2.json
+//http://djotto.dyns.dev/work.fe/data.json
+//http://djotto.dyns.dev/work.fe/data2.json

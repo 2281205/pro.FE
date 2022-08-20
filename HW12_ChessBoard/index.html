@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW12</title>
+    <style>
+        table, tr, td{border: 1px solid; border-collapse: collapse;}
+        td{text-align: center; padding:5px;}
+        img{width: 30px;} 
+        /* .invert{ filter: invert(1);} для сокращение картинок можно через инверсию цвета выставить противоположный цвет фигуркам */
+        tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even){background: silver;}
+    </style>
+    <script>
+        const alphabet = `abcdefgh`;
+        const figures = [`rook`,`horse`,`bishop`,`queen`,`king`,`bishop`,`horse`,`rook`];
+        let tr='';
+        for (let i=0, num=9; i<10; i++, num--)
+        {
+            let td = '';
+            for (let ii=-1; ii<9; ii++)
+            { 
+                switch (true)
+                {
+                    case i === 0 && ii>=0 && ii<8 || i === 9 && ii>=0 && ii<8:
+                        td+=`<td style="background-color: white;">${alphabet[ii]}</td>`;break;
+                    case i === 1 && ii>=0 && ii<8:
+                        td+=`<td><img src="./img/white/${figures[ii]}.svg"></td>`;break;
+                    case i === 2 && ii>=0 && ii<8:
+                        td+=`<td><img src="./img/white/pawn.svg"></td>`;break;
+                    case i === 8 && ii>=0 && ii<8:
+                        td+=`<td><img src="./img/black/${figures[ii]}.svg"></td>`;break;
+                    case i === 7 && ii>=0 && ii<8:
+                        td+=`<td><img src="./img/black/pawn.svg"></td>`;break;
+                    case i > 0 && i<9 && ii === -1 || i > 0 && i<9 && ii === 8:
+                        td+=`<td style="background-color: white;">${num}</td>`;break;
+                    case i == 0 && ii == 8 || i == 9 && ii == -1:
+                        td+=`<td style="background-color: white;"></td>`;break;
+                    default:
+                    td+=`<td></td>`;break;
+                }
+            };
+         tr+=`<tr>${td}</tr>`
+        };
+        document.write(`<table>${tr}</table>`); 
+    </script>
+</head>
+<body>
+</body>
+</html>

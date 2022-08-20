@@ -21,5 +21,5 @@ const renderFile = (file, i) => {
 getFile(`./DB-files/data.json`, renderFile, 1)
 getFile(`./DB-files/data2.json`, renderFile, 2)
 
-//http://djotto.dyndns.org/work.fe/data.json
-//http://djotto.dyndns.org/work.fe/data2.json
+//http://djotto.dyns.dev/work.fe/data.json
+//http://djotto.dyns.dev/work.fe/data2.json

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW09</title>
+    <style>
+        caption{font-weight: bolder;}
+        table, tr, td{border: 1px solid; border-collapse: collapse;}
+    </style>
+
+    <script>
+    animals = [['🐭','mouse','Jerry'],['🐹','hamster','Biscuit'],['🐰','rabbit','Bugs'],['🦊','fox','Mrs. Fox'],['🐻','bear','Paddington']];
+    food = [['🍎','apple',10],['🍐','pear',12],['🍊','tangerine',15],['🍋','lemon',5],['🍌','banana',7]];
+    universes = [['🖤', 'DC', ['Superman', 'Batman', 'Wonder Woman']],['❤️', 'Marvel', ['Iron Man', 'the Hulk', 'Black Widow']]];
+    debugger
+    function getInfo (Arr, ArrName)
+    {
+        debugger
+        document.write(`<table><caption>${ArrName} info</caption><tbody>`) 
+        for(i=0;i<Arr.length; i++)
+        {
+            str=Arr[i];
+            for(j=0;j<str.length;j++)
+            {
+                if (Array.isArray(str[j]))
+                {str[j]=str[j].join('; ')}
+            }
+            document.write(`<tr><td>${str.join(`</td><td>`)}`);
+        }
+        document.write(`</tbody></table>`);
+    }
+    getInfo(animals, `Animals`); 
+    getInfo(food, `Food`);
+    getInfo(universes, `Universes`);
+    </script>
+</head>
+<body>
+</body>
+</html>

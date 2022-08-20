@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW15</title>
+    <script>
+      const vegetables = [  {name: `tomato`,icon: `🍅`,price: 2.3},
+                            {name: `carrot`,icon: `🥕`,price: 1.5},
+                            {name: `corn`,icon: `🌽`,price: 2.78,season: true}],
+
+                fruits = [  {name: `watermelon`,icon: `🍉`,price: 7.7,season: true},
+                            {name: `cherries`,icon: `🍒`,price: 8.5,season: true},
+                            {name: `pineapple`,icon: `🍍`,price: 9.8}],
+
+                Product =  {};
+//TASK1
+    Product.getPrice = (obj,objectProto) => obj.season ? obj.price*objectProto.seasonKoef : obj.price;
+    Product.getInfo = (obj,objectProto) => (`Product: ${obj.icon} ${obj.name}. Type: ${objectProto.type}. Price: $${Product.getPrice(obj,objectProto)}.`);
+    
+//TASK2 
+    let Vegetable = Object.create(Product);
+    Vegetable.type = `Vegetable`;
+    Vegetable.seasonKoef = 1.3;
+    
+    let Fruit = Object.create(Product);
+    Fruit.type = `Fruit`;
+    Fruit.seasonKoef = 2;
+
+    const makeProtoArr = (arr, objectProto) =>
+    {let newArr=[];
+        for (index in arr)
+        {
+            let newItem = Object.create( objectProto === Vegetable ? Vegetable : Fruit );
+            for (key in arr[index])
+            {newItem[key] = arr[index][key]}
+            newArr.push(newItem)
+        }  
+    return newArr;}
+
+    let vegetablesNew = makeProtoArr(vegetables, Vegetable);
+    let fruitsNew = makeProtoArr(fruits, Fruit);
+    
+    //TASK3
+    const makePrototype = (arr, objectProto, newArr=[]) => newArr = arr.map (i => Product.getInfo(i,objectProto))
+    //TASK4
+    const renderList = (arr) => document.write(`<ul> <li> ${arr.join(`</li><li>`)}</li></ul>`);
+    
+    renderList(makePrototype(vegetablesNew, Vegetable));
+    renderList(makePrototype(fruitsNew, Fruit));
+    
+    //FINAL
+    console.log(vegetablesNew);
+    console.log(fruitsNew);
+    console.log(Product);
+    console.log(Vegetable);
+    console.log(Fruit);
+    </script>
+</head>
+<body> 
+</body>
+</html>

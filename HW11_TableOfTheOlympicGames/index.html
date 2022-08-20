@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW11</title>
+    <style>
+        table, tr, td{border: 1px solid; border-collapse: collapse;}
+        td{text-align: center;}
+        .gold{background-color: gold;border: 5px solid gold;}
+        .silver{background-color: silver;border: 5px solid silver;}
+        .bronze{background-color: darkgoldenrod;border: 5px solid darkgoldenrod;}
+    </style>
+    <script>
+        const   sports = [['🤺','fencing'],['⛸','figure skating'],['⛷','skier'],['🏂','snowboarder'],['🏌','golfing'],['🚣','rowing boat'],['🏊','swimming'],['🤸','gymnastics'],['🤾','handball']],
+                winners = [['fencing','gold','fr'],['fencing','silver','it'],['fencing','bronze','us'],['figure skating','gold','ca'],['figure skating','silver','ru'],['figure skating','bronze','us'],['skier','gold','no'],['skier','silver','ru'],['skier','bronze','fr'],['snowboarder','gold','us'],['snowboarder','silver','jp'],['snowboarder','bronze','au'],['golfing','gold','gb'],['golfing','silver','se'],['golfing','bronze','us'],['rowing boat','gold','us'],['rowing boat','silver','gb'],['rowing boat','bronze','ro'],['swimming','gold','us'],['swimming','silver','gb'],['swimming','bronze','au'],['gymnastics','gold','ru'],['gymnastics','silver','ru'],['gymnastics','bronze','ua'],['handball','gold','dk'],['handball','silver','fr'],['handball','bronze','de'],],
+                olympic = ['🔵','⚫','🔴','🟡','🟢'],
+                olympicName = [`Europe`,`Africa`,`The Americas`,`Asia`,`Oceania`],
+                // Европа — синий, Азия — жёлтый, Африка — чёрный, Австралия — зелёный и Америка — красный
+                medals = [['🥇','gold'],['🥈','silver'],['🥉','bronze'],],
+                continents = [['fr','Europe'],['it','Europe'],['us','The Americas'],['ca','The Americas'],['ru','Europe'],['no','Europe'],['jp','Asia'],['au','Oceania'],['gb','Europe'],['se','Europe'],['ro','Europe'],['ua','Europe'],['dk','Europe'],['de','Europe']],
+                flags = [['fr','🇫🇷'],['it','🇮🇹'],['us','🇺🇸'],['ca','🇨🇦'],['ru','🇷🇺'],['no','🇳🇴'],['jp','🇯🇵'],['au','🇦🇺'],['gb','🇬🇧'],['se','🇸🇪'],['ro','🇷🇴'],['ua','🇺🇦'],['dk','🇩🇰'],['de','🇩🇪']];
+
+function GetIcon(line)
+    {
+        let typeIcon = sports[line][0];
+        return (typeIcon)
+    }
+
+function GetType(line)
+    {
+        let typeName = sports[line][1];
+        return (typeName)
+    }
+
+function GetMedal(icon)
+{
+    for(let mm=m=0; m<medals.length; m++) //['🥇','gold']
+    {
+        mm = medals[m];
+        if (mm[1] == icon)
+        {icon=mm[0]}
+    }
+    return (icon);
+}
+
+function GetFlag(lineType, region) //fencing, EUR
+    {
+        let icon= [];
+        for(let i=0; i<winners.length; i++)
+        {
+            let j = winners[i]; //['fencing','gold','fr'] 
+            if (j[0] === lineType ) 
+            {
+                BufferOfIcon = GetRegion(j[2],region)
+                for(let fm=ff=f=0;f<flags.length;f++) //['fr','🇫🇷']
+                {
+                    ff = flags[f]
+                    if(ff[0] === BufferOfIcon)
+                    { 
+                        fm = GetMedal(j[1]);
+                        icon.push(`<div class="${j[1]}">${ff[1]}--${fm}</div>`)
+                    };
+                };
+            };
+        };
+        return icon.join(``);
+    };
+
+function GetRegion(country,region)
+    {
+        let Arr = [country,region];
+        for(let c=0; c<continents.length;c++)
+        {
+            if (JSON.stringify(continents[c]) == JSON.stringify(Arr)) //надо было сравнить 2 массива, нагуглил способ
+            {return (country)} //вот тут вопрос: если if true то передаем эту перемонную. нет, тогда пустое значение
+        }
+        return(``);
+    };
+
+function renderTHead()
+    {
+    return `<thead><tr><td></td><td>${olympic.join(`</td><td>`)}</td></tr></thead>`;
+    }
+
+function renderTBody()
+    {
+    let TRs = [];
+    for(let line=0; line<sports.length; line++)
+    {
+        let lineIcon = GetIcon(line),
+            lineType = GetType(line),
+            flagEur = GetFlag(lineType, olympicName[0]);
+            flagAfr = GetFlag(lineType, olympicName[1]);
+            flagUS = GetFlag(lineType, olympicName[2]);
+            flagAsia = GetFlag(lineType, olympicName[3]);
+            flagAust = GetFlag(lineType, olympicName[4]);
+        TRs.push(`<tr><td>${lineIcon}</td><td>${flagEur}</td><td>${flagAfr}</td><td>${flagUS}</td><td>${flagAsia}</td><td>${flagAust}</td></tr>`);
+    }
+    return `<tbody>${TRs.join(``)}</tbody>`
+    }
+
+document.write(`<table>${renderTHead()}${renderTBody()}</table>`);
+</script>
+</head>
+<body>
+</body>
+</html>

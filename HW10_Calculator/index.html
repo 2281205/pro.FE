@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW10</title>
+    <script>
+        
+    let CalcOperator = ['+', '-', '*', '/'], 
+        question,
+        repeat;
+
+function InputOperator ()
+    {
+        do
+        {
+        question = prompt(`Введите действие:
+            ${CalcOperator.join(`
+            `)}`,CalcOperator[3]);
+        if(question){question = question.replaceAll(' ', '');}
+        }
+        while(CalcOperator.indexOf(`${question}`) === -1);
+        return(question)
+    }
+
+function CalcInput (i)
+    {
+        let x;
+        do
+        {
+        x = prompt(`Введите число номер ${i}:`);
+        if(x){x = x.replaceAll(` `, ``);}
+        if (question === CalcOperator[3] && i === 2 && x === '0')
+            {
+            alert (`На 0 ДЕЛИТЬ НЕЛЬЗЯ!!`);
+            x = null;
+            }
+        }
+        while(isNaN(x)|| x === null || x === ``);
+        return (x);
+    }
+
+function Calculator (a, b, operationName)
+    {
+        let operationResult;
+        a = parseInt(a);
+        b = parseInt(b);
+        switch (operationName)
+        {
+            case `+`:{operationResult=a+b;break; }
+            case `-`:{operationResult=a-b;break; }
+            case `*`:{operationResult=a*b;break; }
+            case `/`:{operationResult=a/b;break; }
+        }
+        return (operationResult)
+    }
+
+function Calc2 (a, b, operationName)
+    {
+        debugger
+        let operationResult;
+        switch (operationName)
+        {
+            case `+`:{operationResult=sum(a,b);break; }
+            case `-`:{operationResult=minus(a,b);break; }
+            case `*`:{operationResult=multiply(a,b);break; }
+            case `/`:{operationResult=divide(a,b);break; }
+        }
+        return (operationResult)
+    }
+function sum (a,b)
+    {
+        a = parseInt(a);
+        b = parseInt(b); 
+        let operationResult=a+b;
+        return (operationResult)
+    }
+function minus (a,b)
+    {
+        a = parseInt(a);
+        b = parseInt(b); 
+        let operationResult=a-b;
+        return (operationResult)
+    }
+
+function multiply (a,b)
+    {
+        a = parseInt(a);
+        b = parseInt(b); 
+        let operationResult=a*b;
+        return (operationResult)
+    }
+
+function divide (a,b)
+    {
+        a = parseInt(a);
+        b = parseInt(b); 
+        let operationResult=a/b;
+        return (operationResult)
+    }
+
+do
+{
+    let operator = InputOperator (), CalcNumber = [];
+    for(let i=1; i<=2; i++)
+    {
+        CalcNumber.push(CalcInput(i)); 
+    }
+    console.log(`ИТОГО: ${CalcNumber[0]} ${question} ${CalcNumber[1]} = ${Calculator(CalcNumber[0], CalcNumber[1], question)}`);
+    console.log(`****`)
+    console.log(`ИТОГО2: ${CalcNumber[0]} ${question} ${CalcNumber[1]} = ${Calc2(CalcNumber[0], CalcNumber[1], question)}`);
+    repeat = confirm (`ЕЩЕ РАЗ?`);
+}
+while (repeat)
+    </script>
+</head>
+<body>
+</body>
+</html>
