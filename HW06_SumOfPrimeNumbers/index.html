@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW06</title>
+    <script>
+        
+do
+    {
+        length = Math.abs(Math.round(prompt ('Enter Length of arr MIN: 2  MAX: 10',10)));
+    }
+    while (length < 2 || length > 10 || isNaN(length));
+    NumArr = new Array(length);
+    
+    do
+    {
+        PureMin = prompt ('Enter MIN NUMBER in arr   MIN: -10 MAX: 10',-10);
+        if (PureMin !== null) 
+        {
+            PureMin = PureMin.replaceAll(" ","a");
+            PureMin=+Math.round(PureMin)}
+    }
+    while (PureMin < -10 || PureMin > 10 || isNaN(PureMin) || PureMin === null);
+    
+    do
+    {
+        PureMax = prompt (`Enter MAX NUMBER in arr   MIN: ${PureMin+1} MAX: 50`,PureMin+10);
+        if (PureMax !== null){
+            PureMax = PureMax.replaceAll(" ","a");
+            PureMax = +Math.round(PureMax)
+        }
+    }
+    while (PureMax <= PureMin || PureMax > 50 || isNaN(PureMax) || PureMax === null );
+
+
+    for(i=0; i<length; i++)
+    {
+   NumArr[i] = Math.floor(Math.random() * (PureMax - PureMin + 1) + PureMin);
+    document.write(`число номер ${i} из массив: ${NumArr[i]}<br>`);
+}
+console.log(NumArr);
+
+arrOfPrimeNumbers = [];
+
+indexPrime = 0;
+ToKotik:
+for(NumArr[indexPrime]; indexPrime<NumArr.length; indexPrime++){
+    if (NumArr[indexPrime]<2) {continue ToKotik;}
+    for (examination = 2; examination < NumArr[indexPrime]; examination++ ){
+        if ((NumArr[indexPrime] % examination) == 0){continue ToKotik;}
+    } 
+    arrOfPrimeNumbers.push(NumArr[indexPrime]);  
+}
+console.log(arrOfPrimeNumbers);
+result = 0;
+for(s = 0; s < arrOfPrimeNumbers.length; s++) result += arrOfPrimeNumbers[s];
+console.log(result);
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

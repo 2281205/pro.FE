@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW04</title>
+    <script>
+    sendwichcase = 0; //задал переменную "ФЛАГ 0-off 1-on" по ее значению выходим из цикла
+    price=0; //обозначаем переменную заказа
+    do
+    {
+        sendwich = prompt(`STEP 1
+        Выберите сендвич:
+        1- Hamburger
+        2- Cheeseburger
+        ********************
+        Ввевдите соответсвующую цифру, или напишите название сендвича:`)
+        if (sendwich !==null) //еси не null, начинаем работать с переменной, иначе вводим заново переменную
+        {
+            sendwich = sendwich.toLowerCase().replaceAll(" ","");
+            if(sendwich == 'hamburger' || sendwich == 'cheeseburger' || sendwich == '1' || sendwich == '2')
+            {
+                sendwichcase = 1; //не смог 4 'ИЛИ' условия впихнуть в цикла while, делаю проверку. если получаем хоть один TRUE, меняем "ФЛАГ"
+            }
+        } 
+    } 
+    while(sendwichcase !==1); //проверяем "ФЛАГ", выйдем когда хоть одно словия IF будет TRUE
+    switch(sendwich) //не указывал default case, потому что всего 4 значение может быть.
+    {
+        case '1':
+        case 'hamburger':
+            sendwich = 'Hamburger'; //значение уйдет в переменную печати
+            price += 10; // плюсуем стоимость
+            break;
+        case '2':
+        case 'cheeseburger':
+            sendwich = 'Cheeseburger';
+            price += 15;
+            sendwichPLUS = confirm ('`Would you like double cheese?`');
+            if (sendwichPLUS) //если соглашаемся, в переменную печати перезаписываем новое название, плюсуем еще 5 уе.
+            {
+                sendwich = 'DoubleCheeseburger';
+                price +=5;
+            }
+            break;
+    }
+console.log(`STEP 1: BULKA ${sendwich} PRICE ${price}`); //проверям в логе что получилось по STEP1
+    
+    potato = confirm (`STEP 2:
+    Would you like potato?`);
+    if (potato)
+    {
+        potatoSize = prompt (`STEP 2
+        Выберите размер картошки:
+        1- small
+        2- middle
+        3- big
+        ********************
+        Введите соответсвующую цифру, или напишите размер картошки:`,'small');
+        if (potatoSize === null){potatoSize =''}; //если нажать отмену, null первеодим в "", тем самым в дефолтное значение small.
+        potatoSize = potatoSize.toLowerCase().replaceAll(" ","");
+        switch(potatoSize)
+        {
+            case '1':
+            case 'small':
+            default: //указали дефолтное значение
+                potatoResult = `<li>Potato 🍟: Small </li>` //значение уйдет в переменную печати
+                price += 10; //плюсуем к общему прайсу
+                break;
+            case '2':
+            case 'middle':
+                potatoResult = `<li>Potato 🍟: Middle </li>`
+                price += 15;
+                break;
+            case '3':
+            case 'big':
+                potatoResult = `<li>Potato 🍟: Big </li>`
+                price += 20;
+                break;
+        }
+    }
+    else {potatoResult =  ''}; //если нажали отмену на вопросе о картошке. в список печати попадет пустая строка
+console.log(`STEP 2: FRIE ${potatoResult} PRICE ${price}`); //проверяем что получили на STEP2
+
+    sauce = confirm (`STEP 3
+    Would you like sauce?`);
+    if (sauce)
+    {
+        sauceType = prompt (`STEP 3
+        Choose sauce:
+        1- ketchup
+        2- mayonnaise
+        ********************
+        Введите соответсвующую цифру, или напишите соус:`, 'ketchup');
+        if (sauceType === null){sauceType =''};
+        sauceType = sauceType.toLowerCase().replaceAll(" ","");
+        switch(sauceType)
+        {
+            case '1':
+            case 'ketchup':
+            default:
+                sauceResult = `<li>Sauce 🧂: Ketchup </li>`
+                price += 10;
+                break;
+            case '2':
+            case 'mayonnaise':
+                sauceResult = `<li>Sauce 🧂: Mayonnaise </li>`
+                price += 10;
+                break;
+    
+        }
+    }
+    else {sauceResult =  ''};
+console.log(`STEP 3: SAUSE ${sauceResult} PRICE ${price}`);
+    document.write(`<h2>Your order:</h2> 
+    <ul>
+        <li>sendwich 🍔: ${sendwich} </li>
+		${potatoResult}
+		${sauceResult}
+	</ul>
+
+	<p>Price: ${price} </p>`); //печатаем в body согласно выбраным пунктам.
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

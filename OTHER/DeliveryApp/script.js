@@ -38,14 +38,16 @@ const getUserLogin = () =>{
     else return false;
 }
 
-const setUserLogOut = async (e) =>
-{
-    if (getUserLogin()){
+const setUserLogOut = async e =>
+{                                   //???????
+    if (getUserLogin())
+    {
         let storageUsers = JSON.parse(localStorage.getItem('userName'))
         console.log(storageUsers)
         if(storageUsers.shoppingCart.length) {
             let addedUser = await controller(API+`/restUser/${storageUsers.id}`, `PUT`, shoppingCart=`+++`)
-            console.log(`in if:  ${storageUsers.shoppingCart.length} ***`)}
+            console.log(`in if:  ${storageUsers.shoppingCart.length} ***`)
+        }
 
         localStorage.removeItem('userName');
         document.querySelector(`#userLogOut`).style.display='none';
@@ -218,7 +220,40 @@ const restLogin = async (localRest) => {
 	});
 }
 
+const renderShop = () => {
 
+    let ItemDoc = document.querySelector(`.container-content`);
+    ItemDoc.innerHTML ='';
+
+        obj.product.forEach(item=>
+            {
+                ItemDiv = document.createElement('div');
+                ItemDiv.className = `container-content--item`;
+                ItemDiv.innerHTML=`
+                        <img src="${item.URL}" alt="${item.nameProduct}">
+                        <h3>${item.nameProduct} ${item.optional ? item.optional : ''}</h3>
+                        <span>Price: ${item.price} $</span>
+                        <button>Buy This   <b>${item.nameProduct} ${item.optional ? item.optional : ''}</b></button>`;
+            ItemDoc.append(ItemDiv);
+            ItemDiv.addEventListener(`click`,()=>{
+                let  storageUsers = JSON.parse(localStorage.getItem('userName'))
+            document.querySelector('#headerShoppingCartCount').innerHTML=++UsrCount;
+            storageUsers.shoppingCart.push({id:obj.id,product:item.nameProduct,count:1, price:item.price})
+          
+    
+    
+            console.log(`name:`, storageUsers.shoppingCart)
+            console.log(`localuser: `, localStorage.getItem('userName'));
+            console.log(`MAGAZ ID: `, obj.id);
+            console.log(`MAGAZ name: `, obj.name);
+            console.log(`MAGAZ product: `, item.nameProduct);
+            console.log(`MAGAZ price: `, item.price);
+                
+            })
+        });  
+   
+   
+    }
 
 restRender();
 //getStorageUsers()

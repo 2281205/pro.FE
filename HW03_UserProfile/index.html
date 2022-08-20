@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW03</title>
+    <script>
+    userName = prompt("Enter You'r Name:");
+        if (userName === null) //проверяем не нажал ли пользователь отмена
+        {
+            userName = 'Mike'; //defaul name
+        }
+        else       
+        {
+            userName = userName.trim(); //не использовал .replaceAll(" ","") потому что может быть двойное имя через пробел
+            if (userName === '') //проверяем не осталась ли пустая строка после .trim(); 
+            {
+                userName = 'Mike' //defaul name
+            };
+        };
+
+    userSurname = prompt("Enter You'r Surname:"); 
+        if (userSurname === null)
+        {
+            userSurname = 'Merzliakov'; //defaul surname
+        }
+        else       
+        {
+            userSurname = userSurname.trim(); 
+            if (userSurname ==='')
+            {
+                userSurname = 'Merzliakov'; //defaul surname
+            }
+        }
+
+    userMail = prompt("Enter You'r email:");
+    if (userMail === null) //назначил переменной '' что б было меньше вложеных if в if
+    {
+        userMail = '';
+    }
+    userMail = userMail.toLowerCase().replaceAll(" ","");
+    writeMail = userMail;
+    if (userMail !== '' )
+    {
+        if (!userMail.includes('@'))
+        {
+            writeMail = `not valid email <b>${userMail}</b> (symbol @ not exist)`;
+        }
+        if (userMail.startsWith('@'))
+        {
+            writeMail = `not valid email <b>${userMail}</b> (symbol @ find in first place)`;
+        }
+        if (userMail.endsWith('@'))
+        {
+            writeMail = `not valid email <b>${userMail}</b> (symbol @ find in last place)`;
+        }
+        if (userMail == '@') //поставил проверку на случай если ввели только @ (данный случай подходит под верхние условия, но не подходит под условия задачи)
+        {
+            writeMail = `not valid email <b>${userMail}</b> (just symbol @)`;
+        }
+    }
+    else
+    {
+        writeMail = 'email not defined'; 
+    }
+
+    userYear = prompt("Enter You'r Age:");
+    currentYear = new Date().getFullYear(); // узнали актуальный год
+        if (userYear !== null) 
+        {
+            userYear = +userYear.replaceAll(" ",""); //убрали пробелы с переменной, перевели в тип numbers
+            if (userYear === '' || (isNaN(userYear)) || userYear<1900 || userYear > currentYear)
+            {
+                userYear = '1988' //defaul Age
+            }
+            userAge = currentYear - userYear;
+        }
+        else       
+        {
+            userAge = '1988'; //defaul Age
+        };
+    document.write(`<ul>
+    <li>Full name: <b>${userName} ${userSurname}</b></li>
+    <li>Email: ${writeMail}</li>
+    <li>Age: <b>${userAge}</b></li></ul>`);
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+

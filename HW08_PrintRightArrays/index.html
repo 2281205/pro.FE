@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        //создаем масивы данных
+    sports = [['skier','⛷'],['snowboarder','🏂'],['apple','🍎'],['hockey','🏒'],['ice skate','⛸'],
+	['swimmer','🏊'],['surfer','🏄‍'],['watermelon','🍉'],['lemon','🍋'],['rowboat','🚣'],['bicyclist','🚴‍']];
+    winter_sports = [];
+    summer_sports = [];
+    fruits = [];
+        // циклом переносим данные по масивам зимних/летних видов. Заметил закономерность в массиве, решил ей воспользоватся
+    for(i=0; i<sports.length; i++)
+    {
+        if(Array.isArray(sports[i]) && i<5) //зимний вид идет до 5й ячейки массива
+        {
+            winter_sports[i] = sports[i].slice();
+        } 
+        else if(Array.isArray(sports[i]) && i>=5) //летний вид идет после 5й ячейки массива
+        {
+            j = i-5;                            // сместил счетчик масива, потому что он сделает мне новый масив с 6й ячейки
+            summer_sports[j] = sports[i].slice();
+        } 
+    }
+BufferOfFruits = winter_sports.splice(2, 1); //вырезал первый фрукт во временный массив
+fruits = summer_sports.splice(2, 2); //вырезал оставшиеся фрукты в основной масив
+fruits.unshift(BufferOfFruits[0]); //добавил вначало массива первый фрукт согласно заданию
+console.log (`
+*** Winter sports ***`)
+for (i=0; i<winter_sports.length; i++){
+    console.log(winter_sports[i].join(`: `));
+}
+console.log (`
+*** Summer sports ***`)
+for (i=0; i<summer_sports.length; i++){
+    console.log(summer_sports[i].join(`: `));
+}
+console.log (`
+*** Fruits ***`)
+for (i=0; i<fruits.length; i++){
+    console.log(fruits[i].join(`: `));
+}                               //вывел все в консоль, долго думал как это сделать циклом, но не могу понять как к разным массивам обратится.
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrap{display: inline-flex; flex-direction:column; width: 100px; height: 100px;}
+        .circle{width: 90px; height: 90px; border-radius: 50%;}
+        .text{text-align: center;}
+        .color-0 {background-color: red;}
+        .color-1 {background-color: orange;}
+        .color-2 {background-color: yellow;}
+        .color-3 {background-color: greenyellow;}
+        .color-4 {background-color: blue;}
+        .color-5 {background-color: navy;}
+        .color-6 {background-color: purple;}
+    </style>
+    <script>
+    hero = ['Ivan'];
+    native = ['York','Of'];
+    destination = ['Poltava','In'];
+    rainbow = hero.concat(native, destination).reverse();
+    console.log(hero,native,destination,rainbow);
+    BufferArr = rainbow.splice(0,1);
+    rainbow.shift();
+    rainbow.pop();
+    rainbow.unshift('Richard');
+    rainbow = rainbow.concat('Gave','Battle',BufferArr[0],'Vain');
+    console.log (`final:`,rainbow);
+    for (i=0; i<rainbow.length; i++)
+    {
+        document.write(`<div class="wrap"><div class="color-${i} circle"></div><div class="text">${rainbow[i]}</div></div>`);
+    };
+    </script>
+</head>
+<body>
+</body>
+</html>
