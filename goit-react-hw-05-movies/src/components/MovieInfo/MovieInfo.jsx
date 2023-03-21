@@ -31,7 +31,7 @@ const MovieInfo = ({ movie, backPath }) => {
         <MovieTitle>
           {title} ({releaseDate})
         </MovieTitle>
-        <MovieScore>2User score: {Math.round(vote_average * 10)}%</MovieScore>
+        <MovieScore>User score: {Math.round(vote_average * 10)}%</MovieScore>
         {overview && (
           <>
             <MovieSubtitle>Overview</MovieSubtitle>

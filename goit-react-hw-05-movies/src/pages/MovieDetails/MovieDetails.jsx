@@ -33,6 +33,7 @@ export default function MovieDetails() {
   //     }
   //   }
   //   fetchInfo();
+  
   // }, [movieId]);
 
   useEffect(() => {

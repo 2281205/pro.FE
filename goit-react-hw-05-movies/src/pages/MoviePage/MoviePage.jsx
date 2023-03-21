@@ -37,7 +37,8 @@ export default function MoviePage() {
           ? setMovies(data.results)
           : setMovies((state) => [...state, ...data.results]);
 
-         } catch {
+         } catch (error) {
+          console.log(error);
         toast.error("Something wrong!");
       } finally {
         setLoadings(false);
@@ -45,31 +46,6 @@ export default function MoviePage() {
     };
     moviesQuery();
   }, [querySearch, page]);
-
-
-                //   setLoadings(true);
-                //   try {
-                //     getSearchMovies(querySearch, page).then(({ results, total_pages }) => {
-                //       setLoadings(false);
-
-                //       if (results.length === 0) {
-                //         setError(`No results to show for "${querySearch}!"`);
-                //         return;
-                //       }
-
-                //       if (page > 1) {
-                //         return setMovies(prevMovies => [...prevMovies, ...results]);
-                //       }
-
-                //       setMovies(results);
-
-                //       setTotalMovies(total_pages);
-                //     });
-                //   } catch (error) {
-                //     toast.error(error);
-                //     setLoadings(false);
-                //   }
-                // }, [querySearch, page]);
 
 
 
@@ -98,11 +74,8 @@ export default function MoviePage() {
       {loadings && <Loader />}
       {error && <InfoTitle>{error}</InfoTitle>}
 
-      {movies.length > 0 ? <MovieList movies={movies}/> : console.log('EMPTYYYYY')}
-      {console.log(movies,page)}
-      {movies.length > 0 && (
-        <LoadMore onClick={loadMore} />
-      )}
+      {movies.length > 0 && <MovieList movies={movies}/>}
+      {movies.length > 0 && <LoadMore onClick={loadMore} />}
     </main>
   );
 }
