@@ -40,14 +40,16 @@ const Cast = () => {
     };
     fetchMovieCast();
   }, [movieId]);
-  console.log(actors);
-  if (actors === null) {
-    return;
-  }
-  console.log('after!!!');
+
+
+  // if (actors === null) {
+  //   return;
+  // }
+
+
   return (
     <CastBox>
-      {actors.length > 0 ? (
+      {actors && actors.length > 0 ? (
         <CastList>
           {actors.map(({ id, name, profile_path, character }) => {
             const img = getPoster(profile_path);
