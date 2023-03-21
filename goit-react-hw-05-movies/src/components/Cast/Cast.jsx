@@ -17,14 +17,6 @@ const Cast = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   try {
-  //     getCast(movieId).then(data => setActors(data.cast));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, [movieId]);
-
   useEffect(() => {
     setIsLoading(true);
 
@@ -40,12 +32,6 @@ const Cast = () => {
     };
     fetchMovieCast();
   }, [movieId]);
-
-
-  // if (actors === null) {
-  //   return;
-  // }
-
 
   return (
     <CastBox>

@@ -1,6 +1,7 @@
 import { getReviews } from '../../api/FetchAPI';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import {
   ReviewsList,
   ReviewsItem,
@@ -10,23 +11,27 @@ import {
 
 const Reviews = () => {
   const { movieId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    try {
-      getReviews(movieId).then(data => setReviews(data.results));
-    } catch (error) {
-      console.log(error);
-    }
+    const fetchReviews = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getReviews(movieId);
+        setReviews(data.results);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchReviews();
   }, [movieId]);
-
-  if (reviews === null) {
-    return;
-  }
 
   return (
     <>
-      {reviews.length > 0 ? (
+      {reviews && reviews.length > 0 ? (
         <ReviewsList>
           {reviews.map(({ author, content, id }) => {
             return (
