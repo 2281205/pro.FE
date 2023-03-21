@@ -34,6 +34,7 @@ export default function MoviePage() {
           setError(`No results to show for "${querySearch}!"`);
           return;
         }
+
         if (page > 1) {
           return setMovies(prevMovies => [...prevMovies, ...results]);
         }
@@ -61,6 +62,7 @@ export default function MoviePage() {
   };
 
   const loadMore = () => {
+    
     setPage(prevPage => prevPage + 1);
   };
 
