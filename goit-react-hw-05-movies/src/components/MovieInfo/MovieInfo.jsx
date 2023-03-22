@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Content, Link } from './MovieInfo.styled';
-//import defaultPicture from '../../images/no-poster.jpg';
+import defaultPicture from '../../images/noImage.jpg';
 import PropTypes from 'prop-types';
 import { getMovieId, getPoster } from '../../api/FetchAPI';
 
@@ -26,7 +26,13 @@ const MovieInfo = ({ movie, backPath }) => {
 
   return (
     <MovieBox>
-      <MoviePoster src={img} alt="title" />
+      <MoviePoster 
+      //src={img} alt="title" />
+      src={
+        img
+            ? img
+            : defaultPicture
+          } alt={title} />
       <div>
         <MovieTitle>
           {title} ({releaseDate})
