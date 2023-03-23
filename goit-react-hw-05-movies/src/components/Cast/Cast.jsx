@@ -1,6 +1,7 @@
 import { getCast, getPoster } from '../../api/FetchAPI';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Loader } from 'components/Loader/Loader';
 import {
   CastBox,
   CastList,
@@ -24,9 +25,9 @@ const Cast = () => {
       try {
         const data = await getCast(movieId);
         setActors(data.cast);
-      } catch (error) {
-        console.log(error);
+      } catch (error){
         setError('Something wrong');
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -36,6 +37,8 @@ const Cast = () => {
 
   return (
     <CastBox>
+      {isLoading && <Loader />}
+      {error && <p>Something went wrong</p>}
       {actors && actors.length > 0 ? (
         <CastList>
           {actors.map(({ id, name, profile_path, character }) => {

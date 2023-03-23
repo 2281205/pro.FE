@@ -1,11 +1,9 @@
 import React from 'react';
-import { Container, Content, Link } from './MovieInfo.styled';
 import defaultPicture from '../../images/noImage.jpg';
 import PropTypes from 'prop-types';
-import { getMovieId, getPoster } from '../../api/FetchAPI';
+import { getPoster } from '../../api/FetchAPI';
 
 import {
-  BackLink,
   MovieBox,
   MoviePoster,
   MovieTitle,
@@ -14,8 +12,7 @@ import {
   MovieText,
   MovieList,
   MovieItem,
-  AdditionalLink,
-  AdditionalBox,
+
 } from '../../pages/MovieDetails/MovieDetails.styled';
 
 const MovieInfo = ({ movie, backPath }) => {
@@ -27,7 +24,6 @@ const MovieInfo = ({ movie, backPath }) => {
   return (
     <MovieBox>
       <MoviePoster 
-      //src={img} alt="title" />
       src={
         img
             ? img
@@ -71,27 +67,3 @@ MovieInfo.propTypes = {
 };
 
 export default MovieInfo;
-
-// <Container>
-//   <img
-//     src={
-//     poster_path
-//     ? https://image.tmdb.org/t/p/w500/${poster_path}
-//         : defaultPicture
-//         }
-//     alt={title}
-//     />
-// <Content>
-//     <h1>{title}</h1>
-//         <p>Rating: {vote_average.toFixed(1)}</p>
-//         <p>Genres: {genres.map(genre => genre.name).join(', ')}</p>
-//         <p>{overview}</p>
-//     <Link to="cast" state={{ from: backPath }}>
-//         Cast
-//     </Link>
-//     <Link to="reviews" state={{ from: backPath }}>
-//         Reviews
-//     </Link>
-// </Content>
-
-// </Container>

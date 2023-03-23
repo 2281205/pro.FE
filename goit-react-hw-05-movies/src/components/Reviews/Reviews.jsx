@@ -1,6 +1,7 @@
 import { getReviews } from '../../api/FetchAPI';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Loader } from 'components/Loader/Loader';
 
 import {
   ReviewsList,
@@ -31,6 +32,7 @@ const Reviews = () => {
 
   return (
     <>
+     {isLoading && <Loader />}
       {reviews && reviews.length > 0 ? (
         <ReviewsList>
           {reviews.map(({ author, content, id }) => {

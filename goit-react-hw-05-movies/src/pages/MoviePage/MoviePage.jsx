@@ -47,9 +47,6 @@ export default function MoviePage() {
     moviesQuery();
   }, [querySearch, page]);
 
-
-
-
   const searchMovies = newMovies => {
     
     if (querySearch === newMovies) {
