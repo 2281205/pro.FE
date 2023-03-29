@@ -42,18 +42,3 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
-// export const store = configureStore({
-//     reducer: {
-//         contacts: persistedContactsReducer,
-//         filter: persistedFilterReducer
-//     },
-//     middleware: (getDefaultMiddleware) =>
-//         getDefaultMiddleware({
-//             serializableCheck: {
-//                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//             },
-//         }),
-// });
-
-// export const persistor = persistStore(store);

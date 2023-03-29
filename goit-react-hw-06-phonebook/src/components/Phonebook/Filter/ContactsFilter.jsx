@@ -1,4 +1,3 @@
-import propTypes from 'prop-types';
 import styles from './Filter.module.css';
 
 const ContactsFilter = ({ filter, onChange }) => {
@@ -13,14 +12,9 @@ const ContactsFilter = ({ filter, onChange }) => {
         className={styles.filter}
         placeholder="Filter"
       />
-{/* {console.log(filter)} */}
+      {/* {console.log(filter)} */}
     </div>
   );
-};
-
-ContactsFilter.propTypes = {
-  onChange: propTypes.func.isRequired,
-  filter: propTypes.string.isRequired,
 };
 
 export default ContactsFilter;
